@@ -120,11 +120,4 @@ void Jeu_Tir(int tailleL, int tailleH, int nivdiff){
   Affichage_desallouer(&A);  
   Canon_desallouer(&C);
   
- }
- 
- 
- 
-
-
-
-
+}

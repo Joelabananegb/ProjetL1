@@ -6,11 +6,11 @@ Affichage.o: Affichage.c Affichage.h
 Canard.o: Canard.c Canard.h Flechette.h
 	gcc -c -Wall Canard.c
 
-main_jeu.o: main.c Affichage.h 
+main.o: main.c Affichage.h 
 	gcc -c -Wall main.c
 
-main_jeu: main_jeu.o Affichage.o Canon.o 
-	gcc -o main main_jeu.o Affichage.o Canon.o -lncurses
+main: main.o Affichage.o Canon.o 
+	gcc -o main main.o Affichage.o Canon.o -lncurses
 
 clean:
-	rm -fr *~ *.o game
+	rm -fr *~ *.o main

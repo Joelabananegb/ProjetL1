@@ -57,6 +57,3 @@ void Canon_afficher(Canon *C, Affichage* A){
   strcpy(A->tab[C->xpos-2][C->ypos+C->largeur/2+1],"\33[44m ");
 
 }
-
-
-

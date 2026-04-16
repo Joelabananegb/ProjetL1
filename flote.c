@@ -11,6 +11,7 @@ Flotte *cree_flotte(int n){
   }
   return cr_flotte;
 }
+
 void initialisee_random(Flotte *flotte){
 
   for (int i= 0; i<flotte->nb_voit; i++){

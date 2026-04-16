@@ -34,7 +34,7 @@ void AffichageDesallouer(Affichage **grille){
 
 
 /* Remplit une grille de vide */
-void Affichage_vider(Affichage *grille){
+void AffichageVider(Affichage *grille){
   int x,y;
   for (x=0; x<grille->hauteur; x++)
     for (y=0; y<grille->largeur; y++){
@@ -42,7 +42,7 @@ void Affichage_vider(Affichage *grille){
     }
 }
 
-void Affichage_cadre(Affichage *A){
+void AffichageCadre(Affichage *A){
   int x,y;
    
   /* Cadre */
@@ -59,7 +59,7 @@ void Affichage_cadre(Affichage *A){
 
 
 /* Affiche une grille dans le terminal */
-void Affichage_dessiner(Affichage *grille){
+void AffichageDessiner(Affichage *grille){
   int x, y;
   
   printf("\33[2J"); /* Efface tout l'ecran */

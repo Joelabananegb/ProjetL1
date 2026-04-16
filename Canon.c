@@ -4,34 +4,34 @@
 #include "Canon.h"
 
 Canon* Canon_initialiser(int pos_min, int pos_max, int hauteur_aff){
-   Canon *C= malloc(sizeof(Canon));
-   C->hauteur=2;
-   C->largeur=11;
-   C->ypos=(pos_min+pos_max)/2; 
-   C->ypos_old=C->xpos; 
-   C->xpos= hauteur_aff-C->hauteur-1;
-   C->pos_min=pos_min+3; 
-   C->pos_max=pos_max-3;
-   C->pas=5;
-   return C;
+   Canon *canon= malloc(sizeof(Canon));
+   canon->hauteur=2;
+   canon->largeur=11;
+   canon->ypos=(pos_min+pos_max)/2; 
+   canon->ypos_old=C->xpos; 
+   canon->xpos= hauteur_aff-C->hauteur-1;
+   canon->pos_min=pos_min+3; 
+   canon->pos_max=pos_max-3;
+   canon->pas=5;
+   return canon;
 }
 
-void Canon_desallouer(Canon** C){
-  free(*C);
-  *C=NULL;
+void CanonDesallouer(Canon** canon){
+  free(*canon);
+  *canon=NULL;
 }
 
 
-void Canon_action(Canon *C, enum action_canon actC){
+void CanonAction(Canon *canon, enum action_canon actC){
 
-  C->ypos_old= C->ypos; 
+  canon->ypos_old= canon->ypos; 
 
   switch (actC){
     case Gauche_canon:
-      C->ypos-=C->pas;
+      caonon->ypos-=canon->pas;
       break;
     case Droite_canon:
-      C->ypos+=C->pas;
+      canon->ypos+=canon->pas;
       break;  
     case Tir:
       // Lance une fléchette

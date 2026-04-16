@@ -1,5 +1,5 @@
-#ifndef FLOTE_H
-#define FLOTE_H
+#ifndef __FLOTE_H__
+#define __FLOTE_H__
 
 typedef struct Voiture{
   int imat;
@@ -12,10 +12,10 @@ typedef struct Flotte{
   Voiture **TabV;
 }Flotte;
 
-Flotte *cree_flotte(int);
-void initialisee_random(Flotte *);
-void afficer(Flotte *);
-void desalloue_flotte(Flotte **F);
-void afficher_plus_ancienne(Flotte *F);
+Flotte *CreeFlotte(int);
+void InitialiseeRandom(Flotte *);
+void Afficer(Flotte *);
+void DesalloueFlotte(Flotte **F);
+void AfficherPlusAncienne(Flotte *F);
 
 #endif

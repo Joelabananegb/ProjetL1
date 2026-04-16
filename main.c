@@ -56,9 +56,6 @@ void Jeu_Tir(int tailleL, int tailleH, int nivdiff){
 
   Canon *C = Canon_initialiser(0, tailleL, tailleH);
   enum action_canon actC;
-
-  
-  
  
   /* Boucle événementielle du jeu */ 
   do{
@@ -119,5 +116,4 @@ void Jeu_Tir(int tailleL, int tailleH, int nivdiff){
   
   Affichage_desallouer(&A);  
   Canon_desallouer(&C);
-  
 }

@@ -14,8 +14,8 @@ typedef struct Flotte{
 
 Flotte *CreeFlotte(int);
 void InitialiseeRandom(Flotte *);
-void Afficer(Flotte *);
-void DesalloueFlotte(Flotte **F);
+void Afficher(Flotte *);
+void DesallouerFlotte(Flotte **F);
 void AfficherPlusAncienne(Flotte *F);
 
 #endif

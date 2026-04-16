@@ -13,10 +13,10 @@ typedef struct{
   int ypos_old;           /* Position précédente du Canon */ 
 } Canon;
 
-Canon* Canon_initialiser(int pos_min, int pos_max, int hauteur_aff);
-void Canon_desallouer(Canon** C);
-void Canon_action(Canon *C, enum action_canon actC);
-void Canon_afficher(Canon *C, Affichage* A);
+Canon* Canon_initialiser(int , int , int );
+void Canon_desallouer(Canon **);
+void Canon_action(Canon *, enum action_canon actC);
+void Canon_afficher(Canon *, Affichage *);
 
 
 #endif 

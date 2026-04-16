@@ -6,7 +6,8 @@
 
 
 /* Structure necessaire aux fonctions d affichage*/
-typedef struct Affichage{  
+typedef struct Affichage
+{  
   int largeur, hauteur;     /* Largeur, Hauteur de l'affichage */
   char *** tab; /* Tableau à deux dimensions de chaînes de caractères ASCII */
 } Affichage;

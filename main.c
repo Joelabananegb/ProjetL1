@@ -52,9 +52,9 @@ void Jeu_Tir(int tailleL, int tailleH, int nivdiff){
   
   res= CONTINUE;
   
-  Affichage *A=Affichage_initialiser(tailleL, tailleH);  
+  Affichage *A=AffichageInit(tailleL, tailleH);  
 
-  Canon *C = Canon_initialiser(0, tailleL, tailleH);
+  Canon *C = CanonInit(0, tailleL, tailleH);
   enum action_canon actC;
  
   /* Boucle événementielle du jeu */ 
@@ -62,11 +62,11 @@ void Jeu_Tir(int tailleL, int tailleH, int nivdiff){
   
     ch = getch(); /* Si aucune touche utilisée, getch renvoie -1 */   
 
-    Affichage_vider(A);
-    Affichage_cadre(A);
-    Canon_afficher(C, A);    
+    AffichageVider(A);
+    AffichageCadre(A);
+    CanonAfficher(C, A);    
     // Autre affichage
-    Affichage_dessiner(A);
+    AffichageDessiner(A);
     printf("Pour jouer: utiliser les flèches, SPACE pour tirer (ESC pour Sortir)\33[1E\33[1E");
     fflush(stdout);  /* Force l'affichage complet	 */
 
@@ -114,6 +114,6 @@ void Jeu_Tir(int tailleL, int tailleH, int nivdiff){
 
   endwin(); /* Doit obligatoirement etre mis en fin de programme pour remettre le terminal en etat */  
   
-  Affichage_desallouer(&A);  
-  Canon_desallouer(&C);
+  AffichageDesallouer(&A);  
+  CanonDesallouer(&C);
 }

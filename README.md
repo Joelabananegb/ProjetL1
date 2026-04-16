@@ -1,5 +1,5 @@
-#Titre: Déplacement du canon#
-Auteur: Pierre Fouilhoux
+# Titre: Déplacement du canon #
+## Auteur: Pierre Fouilhoux ##
 
 Affiche un écran de jeux et permet le déplacement d'un canon dans la fenêtre d'un terminal en utilisant un affichage ASCII
 

@@ -1,10 +1,10 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<time.h>
-#include<ncurses.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <ncurses.h>
 
-#include"Canon.h"
-#include"Affichage.h"
+#include "Canon.h"
+#include "Affichage.h"
 
 // Liste des évènements possibles
 enum evenement {CONTINUE, ECHAP};
@@ -92,7 +92,7 @@ void Jeu_Tir(int tailleL, int tailleH, int nivdiff){
                
        if (res!=ECHAP){
 	 // Zone des actions dirigeant un élément
-          Canon_action(C, actC);      
+          CanonAction(C, actC);      
        }
            
      }

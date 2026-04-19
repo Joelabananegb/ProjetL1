@@ -1,7 +1,7 @@
 #ifndef _CANON_H_
 #define _CANON_H_
 
-#include"Affichage.h"
+#include "Affichage.h"
 
 enum action_canon {Gauche_canon, Droite_canon, Tir};
 
@@ -13,11 +13,10 @@ typedef struct{
   int ypos_old;           /* Position précédente du Canon */ 
 } Canon;
 
-Canon* Canon_initialiser(int pos_min, int pos_max, int hauteur_aff);
-void Canon_desallouer(Canon** C);
-void Canon_action(Canon *C, enum action_canon actC);
-void Canon_afficher(Canon *C, Affichage* A);
-
+Canon *CanonInitialiser(int, int, int);
+void CanonDesallouer(Canon **);
+void CanonAction(Canon *, enum action_canon);
+void CanonAfficher(Canon *, Affichage* );
 
 #endif 
 

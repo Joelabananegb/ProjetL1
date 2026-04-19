@@ -1,61 +1,69 @@
-#include<stdlib.h>
-#include<stdio.h>
-#include<string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "Canon.h"
 
-Canon* Canon_initialiser(int pos_min, int pos_max, int hauteur_aff){
-   Canon *canon= malloc(sizeof(Canon));
-   canon->hauteur=2;
-   canon->largeur=11;
-   canon->xpos= hauteur_aff-canon->hauteur-1;
-   canon->ypos=(pos_min+pos_max-canon->largeur)/2; 
-   canon->ypos_old=canon->xpos; 
-   canon->pos_min=pos_min+3; 
-   canon->pos_max=pos_max-3;
-   canon->pas=5;
+Canon *CanonInitialiser(int posMin, int posMax, int hauteurGrille)
+{
+   Canon *canon = malloc(sizeof(Canon));
+   canon->hauteur = 2;
+   canon->largeur = 11;
+   canon->xpos = hauteurGrille-canon->hauteur - 1;
+   canon->ypos = (posMin + posMax - canon->largeur) / 2; 
+   canon->ypos_old = canon->xpos; 
+   canon->pos_min = posMin + 3; 
+   canon->pos_max = posMax - 3;
+   canon->pas = 5;
    return canon;
 }
 
-void Canon_desallouer(Canon** C){
-  free(*C);
-  *C=NULL;
+void CanonDesallouer(Canon** canon)
+{
+  free(*canon);
+  *canon = NULL;
 }
 
 
-void Canon_action(Canon *C, enum action_canon actC){
+void CanonAction(Canon *canon, enum action_canon actC)
+{
+  canon->ypos_old = canon->ypos; 
 
-  C->ypos_old= C->ypos; 
-
-  switch (actC){
+  switch (actC)
+  {
     case Gauche_canon:
-      C->ypos-=C->pas;
+      canon->ypos -= canon->pas;
       break;
     case Droite_canon:
-      C->ypos+=C->pas;
+      canon->ypos += canon->pas;
       break;  
     case Tir:
       // Lance une fléchette
       break;       
   }
 
-  if ((C->ypos<C->pos_min)||(C->ypos>C->pos_max-C->largeur)){
-   C->ypos=C->ypos_old;
+  if ((canon->ypos < canon->pos_min) || (canon->ypos > canon->pos_max - canon->largeur))
+  {
+   canon->ypos = canon->ypos_old;
   }
 }
 
-void Canon_afficher(Canon *C, Affichage* A){ 
-  int x,y;
-  for(x=C->xpos; x<C->xpos+C->hauteur; x++){
-    for (y=C->ypos; y<C->ypos+C->largeur; y++){
-      if (x >= 0 && x <A->H && y>=0 && y< A->L){
-        strcpy(A->tab[x][y],"\33[44m ");
+void CanonAfficher(Canon *canon, Affichage* grille)
+{ 
+  for (int x = canon->xpos; x < canon->xpos + canon->hauteur; x++)
+  {
+    for (int y = canon->ypos; y < canon->ypos + canon->largeur; y++)
+    {
+      if (x >= 0 && x < grille->hauteur && y>=0 && y < grille->largeur)
+      {
+        strcpy(grille->tab[x][y], "\33[44m ");
       }
     }
-    strcpy(A->tab[C->xpos-1][C->ypos+C->largeur/2-1],"\33[44m ");
-    strcpy(A->tab[C->xpos-1][C->ypos+C->largeur/2],"\33[44m ");
-    strcpy(A->tab[C->xpos-1][C->ypos+C->largeur/2+1],"\33[44m ");
-    strcpy(A->tab[C->xpos-2][C->ypos+C->largeur/2-1],"\33[44m ");
-    strcpy(A->tab[C->xpos-2][C->ypos+C->largeur/2],"\33[44m ");
-    strcpy(A->tab[C->xpos-2][C->ypos+C->largeur/2+1],"\33[44m ");
+
+    strcpy(grille->tab[canon->xpos-1][canon->ypos + canon->largeur / 2-1], "\33[44m ");
+    strcpy(grille->tab[canon->xpos-1][canon->ypos + canon->largeur / 2], "\33[44m ");
+    strcpy(grille->tab[canon->xpos-1][canon->ypos + canon->largeur / 2+1], "\33[44m ");
+    strcpy(grille->tab[canon->xpos-2][canon->ypos + canon->largeur / 2-1], "\33[44m ");
+    strcpy(grille->tab[canon->xpos-2][canon->ypos + canon->largeur / 2], "\33[44m ");
+    strcpy(grille->tab[canon->xpos-2][canon->ypos + canon->largeur / 2+1], "\33[44m ");
   }
 }

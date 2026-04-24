@@ -24,10 +24,10 @@ CFLAGS = -Wall -Wextra -g -fsanitize=address
 LDFLAGS = -lncurses -fsanitize=address
 
 # Nom de l'exécutable
-TARGET = main_jeu
+TARGET = jeu
 
 # Fichiers sources
-SRC = main_jeu.c Affichage.c Canon.c
+SRC = main.c Affichage.c Canon.c
 
 # Objets générés automatiquement
 OBJ = $(SRC:.c=.o)

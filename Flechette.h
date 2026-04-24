@@ -13,6 +13,7 @@ typedef struct Flechette {
 
 typedef struct{
   Flechette *head;
+  int lvl;
   int y_depart;
   int y_max;
   int nb;

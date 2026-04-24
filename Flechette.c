@@ -9,6 +9,7 @@ ListeFlechette *ListeFlechetteInit(int hauteur, int lvl)
 {
   ListeFlechette *liste = malloc(sizeof(ListeFlechette));
   liste->head = NULL;
+  liste->lvl = lvl;
   return liste;
 };
 
@@ -31,6 +32,7 @@ void AjouterFlechette(ListeFlechette *flechettes, int x, int y)
   Flechette *newFlechette = malloc(sizeof(Flechette));
   newFlechette->y = y;
   newFlechette->x = x;
+  newFlechette->velocity = flechettes->lvl;
   newFlechette->next = flechettes->head;
   flechettes->head = newFlechette;
 }
@@ -39,9 +41,13 @@ void AfficherFlechette(ListeFlechette *flechettes, Affichage *grille)
 {
   Flechette *current = flechettes->head;
 
-  while(current!=NULL)
+  while (current != NULL)
   {
-    strcpy(grille->tab[current->x][current->y], "|");
+    if (current->x >= 0 && current->x < grille->hauteur)
+    {
+      strcpy(grille->tab[current->x][current->y], "|");
+    }
+
     current = current->next;
   }
 }
@@ -53,7 +59,7 @@ void FlechetteAction(ListeFlechette *flechettes)
 
   while (current != NULL)
   {
-    current->y -= current->velocity; // monte vers le haut
+    current->x -= current->velocity; // monte vers le haut
 
     if (current->y <= 0)
     {

@@ -41,7 +41,7 @@ void CanonAction(Canon *canon, enum action_canon actC)
       break;       
   }
 
-  if ((canon->ypos < canon->pos_min) || (canon->ypos > canon->pos_max - canon->largeur))
+  if ((canon->ypos < canon->pos_min) || (canon->ypos > canon->pos_max - canon->largeur)) // verifier que le canon ne sort pas du cadre de jeu
   {
    canon->ypos = canon->ypos_old;
   }
@@ -59,7 +59,7 @@ void CanonAfficher(Canon *canon, Affichage* grille)
       }
     }
 
-    strcpy(grille->tab[canon->xpos-1][canon->ypos + canon->largeur / 2-1], "\33[44m ");
+    strcpy(grille->tab[canon->xpos-1][canon->ypos + canon->largeur / 2-1], "♖");//"\33[44m ");
     strcpy(grille->tab[canon->xpos-1][canon->ypos + canon->largeur / 2], "\33[44m ");
     strcpy(grille->tab[canon->xpos-1][canon->ypos + canon->largeur / 2+1], "\33[44m ");
     strcpy(grille->tab[canon->xpos-2][canon->ypos + canon->largeur / 2-1], "\33[44m ");

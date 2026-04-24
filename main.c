@@ -16,7 +16,7 @@ enum evenement
     // (on peut en ajouter d'autres (victoire etc)
 
 /* Coeur du jeu contenant la boucle événementielle */
-void JeuTir(int, int, int);
+void MainLoop(int, int, int);
 
 /***************************************/
 
@@ -30,13 +30,13 @@ int main(int argv, char **argc)
      exit(2);
   }
   srand(time(NULL));
-  JeuTir(atoi(argc[1]), atoi(argc[2]), atoi(argc[3]));
+  MainLoop(atoi(argc[1]), atoi(argc[2]), atoi(argc[3]));
   return EXIT_SUCCESS;
 }
 
 /***************************************/
 
-void JeuTir(int tailleL, int tailleH, int nivdiff){
+void MainLoop(int tailleL, int tailleH, int nivdiff){
 
   int ch;   /* Récupération de la saisie clavier, valeur # pour fin de jeu */
   enum evenement KeyEvent; /* Retour des évènements  */
@@ -116,7 +116,6 @@ void JeuTir(int tailleL, int tailleH, int nivdiff){
       ch = getch();
   }while( ch == -1);
   
-
   endwin(); /* Doit obligatoirement etre mis en fin de programme pour remettre le terminal en etat */  
   AffichageDesallouer(&grille);  
   CanonDesallouer(&canon);

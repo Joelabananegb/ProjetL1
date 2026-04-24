@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ncurses.h>
+
 #include "Canon.h"
 #include "Affichage.h"
+#include "Flechette.h"
 
 // Liste des évènements possibles
 enum evenement
@@ -52,9 +54,9 @@ void MainLoop(int tailleL, int tailleH, int nivdiff){
   
   KeyEvent = CONTINUE;
   
-  Affichage *grille = AffichageInitialiser(tailleL, tailleH);  
-
+  Affichage *grille = AffichageInitialiser(tailleL, tailleH);
   Canon *canon = CanonInitialiser(0, tailleL, tailleH);
+  ListeFlechette *Flechettes = ListeFlechetteInit(tailleH, nivdiff);
   enum action_canon actionCanon;
 
 
@@ -68,6 +70,8 @@ void MainLoop(int tailleL, int tailleH, int nivdiff){
     AffichageCadre(grille);
     CanonAfficher(canon, grille);    
     // Autre affichage
+    AfficherFlechette(Flechettes, grille);
+    FlechetteAction(Flechettes);
     AffichageDessiner(grille);
     printf("Pour jouer: utiliser les flèches, SPACE pour tirer (ESC pour Sortir)\33[1E\33[1E");
     fflush(stdout);  /* Force l'affichage complet	 */
@@ -94,7 +98,7 @@ void MainLoop(int tailleL, int tailleH, int nivdiff){
        }
        if (KeyEvent != ECHAP)
       { // Zone des actions dirigeant un élément
-          CanonAction(canon, actionCanon);      
+          CanonAction(canon, actionCanon, Flechettes);      
       }
      }
      
@@ -118,5 +122,6 @@ void MainLoop(int tailleL, int tailleH, int nivdiff){
   
   endwin(); /* Doit obligatoirement etre mis en fin de programme pour remettre le terminal en etat */  
   AffichageDesallouer(&grille);  
+  FlechetteDesallouer(&Flechettes);
   CanonDesallouer(&canon);
  }

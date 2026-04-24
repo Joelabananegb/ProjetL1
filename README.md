@@ -49,3 +49,4 @@ Q 0.5
   on utiliser une chaine vide car le caractere vide n'est pas une chaine vide donc il va rien remplacer
 
 Q 0.6
+https://unicode.org/emoji/charts/full-emoji-list.html

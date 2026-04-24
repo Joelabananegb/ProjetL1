@@ -1,7 +1,8 @@
-#ifndef _CANON_H_
-#define _CANON_H_
+#ifndef CANON_H
+#define CANON_H
 
 #include "Affichage.h"
+#include "Flechette.h"
 
 enum action_canon {Gauche_canon, Droite_canon, Tir};
 
@@ -15,7 +16,7 @@ typedef struct{
 
 Canon *CanonInitialiser(int, int, int);
 void CanonDesallouer(Canon **);
-void CanonAction(Canon *, enum action_canon);
+void CanonAction(Canon *, enum action_canon, ListeFlechette *);
 void CanonAfficher(Canon *, Affichage* );
 
 #endif 

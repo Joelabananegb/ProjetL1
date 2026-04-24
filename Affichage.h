@@ -1,5 +1,5 @@
-#ifndef __AFFICHAGE__
-#define __AFFICHAGE__
+#ifndef AFFICHAGE
+#define AFFICHAGE
 
 #include <stdlib.h>
 #include <stdio.h>

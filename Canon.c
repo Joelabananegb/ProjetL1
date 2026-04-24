@@ -3,6 +3,7 @@
 #include <string.h>
 #include "Canon.h"
 
+
 Canon *CanonInitialiser(int posMin, int posMax, int hauteurGrille)
 {
    Canon *canon = malloc(sizeof(Canon));
@@ -24,7 +25,7 @@ void CanonDesallouer(Canon** canon)
 }
 
 
-void CanonAction(Canon *canon, enum action_canon actC)
+void CanonAction(Canon *canon, enum action_canon actC, ListeFlechette *Flechettes)
 {
   canon->ypos_old = canon->ypos; 
 
@@ -38,6 +39,7 @@ void CanonAction(Canon *canon, enum action_canon actC)
       break;  
     case Tir:
       // Lance une fléchette
+      AjouterFlechette(Flechettes, canon->xpos - 3,canon->ypos + canon->largeur / 2);
       break;       
   }
 
@@ -55,15 +57,15 @@ void CanonAfficher(Canon *canon, Affichage* grille)
     {
       if (x >= 0 && x < grille->hauteur && y>=0 && y < grille->largeur)
       {
-        strcpy(grille->tab[x][y], "\33[44m ");
+        strcpy(grille->tab[x][y], "♖");//"\33[44m ");
       }
     }
 
     strcpy(grille->tab[canon->xpos-1][canon->ypos + canon->largeur / 2-1], "♖");//"\33[44m ");
-    strcpy(grille->tab[canon->xpos-1][canon->ypos + canon->largeur / 2], "\33[44m ");
-    strcpy(grille->tab[canon->xpos-1][canon->ypos + canon->largeur / 2+1], "\33[44m ");
-    strcpy(grille->tab[canon->xpos-2][canon->ypos + canon->largeur / 2-1], "\33[44m ");
-    strcpy(grille->tab[canon->xpos-2][canon->ypos + canon->largeur / 2], "\33[44m ");
-    strcpy(grille->tab[canon->xpos-2][canon->ypos + canon->largeur / 2+1], "\33[44m ");
+    strcpy(grille->tab[canon->xpos-1][canon->ypos + canon->largeur / 2], "♖");//"\33[44m ");
+    strcpy(grille->tab[canon->xpos-1][canon->ypos + canon->largeur / 2+1], "♖");//"\33[44m ");
+    strcpy(grille->tab[canon->xpos-2][canon->ypos + canon->largeur / 2-1], "♖");//"\33[44m ");
+    strcpy(grille->tab[canon->xpos-2][canon->ypos + canon->largeur / 2], "♖");//"\33[44m ");
+    strcpy(grille->tab[canon->xpos-2][canon->ypos + canon->largeur / 2+1], "♖");//"\33[44m ");
   }
 }

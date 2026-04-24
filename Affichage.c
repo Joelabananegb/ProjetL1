@@ -47,7 +47,7 @@ void AffichageVider(Affichage *grille)
   {
     for (int y = 0; y < grille->largeur; y++)
     {
-       strcpy(grille->tab[x][y], "/"); /* met une case vide */
+       strcpy(grille->tab[x][y], " "); /* met une case vide */
     }
   }
 }

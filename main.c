@@ -6,6 +6,7 @@
 #include "Canon.h"
 #include "Affichage.h"
 #include "Flechette.h"
+#include "Canar.h"
 
 // Liste des évènements possibles
 enum evenement
@@ -20,12 +21,13 @@ enum evenement
 /* Coeur du jeu contenant la boucle événementielle */
 void MainLoop(int, int, int);
 
+void SpawnCanar(ListeCanar *, int, int);
 /***************************************/
 
 
 int main(int argv, char **argc)
 {
-
+  srand(time(NULL));
   if (argv!=4)
   {
      printf("Usage: %s <largeur> <hauteur> <niveau de difficulté>\n", argc[0]);
@@ -38,6 +40,15 @@ int main(int argv, char **argc)
 
 /***************************************/
 
+
+void SpawnCanar(ListeCanar *canars, int largeur, int hauteur)
+{
+  int x = largeur - 2;                 // côté droit
+  int y = rand() % (hauteur - 2) + 1;  // aléatoire dans écran
+
+  AjouterCanar(canars, x, y);
+}
+
 void MainLoop(int tailleL, int tailleH, int nivdiff){
 
   int ch;   /* Récupération de la saisie clavier, valeur # pour fin de jeu */
@@ -49,6 +60,8 @@ void MainLoop(int tailleL, int tailleH, int nivdiff){
   keypad(stdscr, TRUE);
   noecho();
   halfdelay(1);  /* Temps d'exécution max de getch à 1/10ème de seconde */
+  int spawnCanarCompteur = 0;
+  int spawnInterval = 15; // plus petit = plus rapide
   
   /* Initialisation des éléments du jeu */
   
@@ -57,24 +70,38 @@ void MainLoop(int tailleL, int tailleH, int nivdiff){
   Affichage *grille = AffichageInitialiser(tailleL, tailleH);
   Canon *canon = CanonInitialiser(0, tailleL, tailleH);
   ListeFlechette *Flechettes = ListeFlechetteInit(tailleH, nivdiff);
+  ListeCanar *Canars = ListeCanarInit(nivdiff);
+
   enum action_canon actionCanon;
 
 
   /* Boucle événementielle du jeu */ 
   do
   {
-  
+    spawnCanarCompteur++; 
     ch = getch(); /* Si aucune touche utilisée, getch renvoie -1 */   
 
     AffichageVider(grille);
     AffichageCadre(grille);
     CanonAfficher(canon, grille);    
     // Autre affichage
-    AfficherFlechette(Flechettes, grille);
+    AfficherCanar(Canars, grille);
     FlechetteAction(Flechettes);
+    AfficherFlechette(Flechettes, grille);
+    CanarAction(Canars);
+
+    if (spawnCanarCompteur >= spawnInterval)
+    {
+      SpawnCanar(Canars, tailleH - 20, tailleL - 10);
+      spawnCanarCompteur = 0;
+      if (spawnInterval > 5) spawnInterval--;
+    }
+
     AffichageDessiner(grille);
     printf("Pour jouer: utiliser les flèches, SPACE pour tirer (ESC pour Sortir)\33[1E\33[1E");
     fflush(stdout);  /* Force l'affichage complet	 */
+
+    
       
     if (ch != -1)
     { /* Si une touche a été appuyée */
@@ -122,6 +149,7 @@ void MainLoop(int tailleL, int tailleH, int nivdiff){
   
   endwin(); /* Doit obligatoirement etre mis en fin de programme pour remettre le terminal en etat */  
   AffichageDesallouer(&grille);  
+  CanarDesallouer(&Canars);
   FlechetteDesallouer(&Flechettes);
   CanonDesallouer(&canon);
  }

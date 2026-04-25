@@ -61,7 +61,7 @@ void FlechetteAction(ListeFlechette *flechettes)
   {
     current->x -= current->velocity; // monte vers le haut
 
-    if (current->y <= 0)
+    if (current->x <= 0)
     {
       if (prev == NULL)
       {

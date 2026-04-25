@@ -27,7 +27,7 @@ LDFLAGS = -lncurses -fsanitize=address
 TARGET = jeu
 
 # Fichiers sources
-SRC = main.c Affichage.c Canon.c Flechette.c
+SRC = main.c Affichage.c Canon.c Flechette.c Canar.c
 
 # Objets générés automatiquement
 OBJ = $(SRC:.c=.o)

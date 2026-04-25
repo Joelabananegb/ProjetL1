@@ -14,7 +14,7 @@ Canon *CanonInitialiser(int posMin, int posMax, int hauteurGrille)
    canon->ypos_old = canon->xpos; 
    canon->pos_min = posMin + 3; 
    canon->pos_max = posMax - 3;
-   canon->pas = 5;
+   canon->pas = 2;
    return canon;
 }
 

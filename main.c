@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <time.h>
 #include <ncurses.h>
 
@@ -20,10 +21,9 @@ enum evenement
 
 /* Coeur du jeu contenant la boucle événementielle */
 void MainLoop(int, int, int);
-
+bool ChechColision(Canar *, Flechette *);
 void SpawnCanar(ListeCanar *, int, int);
 /***************************************/
-
 
 int main(int argv, char **argc)
 {
@@ -47,6 +47,62 @@ void SpawnCanar(ListeCanar *canars, int largeur, int hauteur)
   int y = rand() % (hauteur - 2) + 1;  // aléatoire dans écran
 
   AjouterCanar(canars, x, y);
+}
+
+void Interaction_Flechette_Canard(ListeFlechette *Lflech, ListeCanar *Lcanard)
+{
+    Flechette *f = Lflech->head;
+    Flechette *prevF = NULL;
+
+    while (f != NULL)
+    {
+        Canar *c = Lcanard->head;
+        Canar *prevC = NULL;
+
+        int collision = 0;
+
+        while (c != NULL)
+        {
+            if (f->x == c->x && f->y == c->y)
+            {
+                // 🔥 supprimer le canard
+                if (prevC == NULL)
+                    Lcanard->head = c->next;
+                else
+                    prevC->next = c->next;
+
+                Canar *tmpC = c;
+                c = c->next;
+                free(tmpC);
+
+                collision = 1;
+                break;
+            }
+            else
+            {
+                prevC = c;
+                c = c->next;
+            }
+        }
+
+        if (collision)
+        {
+            // 🔥 supprimer la fléchette
+            if (prevF == NULL)
+                Lflech->head = f->next;
+            else
+                prevF->next = f->next;
+
+            Flechette *tmpF = f;
+            f = f->next;
+            free(tmpF);
+        }
+        else
+        {
+            prevF = f;
+            f = f->next;
+        }
+    }
 }
 
 void MainLoop(int tailleL, int tailleH, int nivdiff){
@@ -89,6 +145,7 @@ void MainLoop(int tailleL, int tailleH, int nivdiff){
     FlechetteAction(Flechettes);
     AfficherFlechette(Flechettes, grille);
     CanarAction(Canars);
+    //Interaction_Flechette_Canard(Flechettes, Canars);
 
     if (spawnCanarCompteur >= spawnInterval)
     {

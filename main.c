@@ -145,7 +145,7 @@ void MainLoop(int tailleL, int tailleH, int nivdiff){
     FlechetteAction(Flechettes);
     AfficherFlechette(Flechettes, grille);
     CanarAction(Canars);
-    //Interaction_Flechette_Canard(Flechettes, Canars);
+    Interaction_Flechette_Canard(Flechettes, Canars);
 
     if (spawnCanarCompteur >= spawnInterval)
     {

@@ -50,3 +50,6 @@ Q 0.5
 
 Q 0.6
 https://unicode.org/emoji/charts/full-emoji-list.html
+
+Partie A fini 
+Mtn je doit refaire le jeu avec un bibliotech graphic SDL

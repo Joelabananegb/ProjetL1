@@ -4,10 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdlib.h>
 #include <time.h>
-//#include "game.h" // Contient les déclarations liées au jeu (player, monster, etc.)
-
-#define SCREEN_HEIGHT 514
-#define SCREEN_WIDTH 514
+#include "game.h" // Contient les déclarations liées au jeu (player, monster, etc.)
 
 int main()
 {
@@ -24,6 +21,15 @@ int main()
     SDL_Log("Erreur de création render: %s", SDL_GetError());
     return 1;
   }
+ 
+  SDL_Texture *background = IMG_LoadTexture(render,"./assets/SpaceInvaders_Background.png");
+  if (!background)
+  {
+    SDL_Log("Erreur de chargement background: %s", SDL_GetError());
+    return 1;
+  }
+
+  HomeScreen(render,background);
 
   bool running = true;
   while (running)
@@ -37,6 +43,7 @@ int main()
       }
     }
     SDL_RenderPresent(render);
+    SDL_Delay(16);
   }
 
   SDL_DestroyRenderer(render);

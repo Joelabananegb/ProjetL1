@@ -5,11 +5,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 896
 
 typedef struct{
-  int velocity;                /* Nombre de cases de déplacement d'un Player à chaque appui */
-  int health, max_health;
-  int score, high_score;
+  short velocity;                /* Nombre de cases de déplacement d'un Player à chaque appui */
+  int health, maxHealth;
+  int score, highScore;
   int attack;
 
   SDL_Rect rect;
@@ -25,9 +27,7 @@ void MoveRight(Player *);
 void MoveUp(Player *);
 void MoveDown(Player *);
 
-//void PlayerDesallouer(Canon **);
-//void PlayerAction(Canon *, enum action_canon, ListeFlechette *);
-//void PlayerAfficher(Canon *, Affichage* );
+void FreePlayer(Player **);
 
 #endif 
 

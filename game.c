@@ -7,7 +7,7 @@ bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
 
 void HomeScreen(SDL_Renderer *render, SDL_Texture *background)
 {
-  SDL_Rect destRect = {0,0,514,514};
+  SDL_Rect destRect = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
   SDL_RenderCopy(render, background, NULL, &destRect);
 }
 
@@ -41,6 +41,63 @@ void RenderProjectiles(Flechettes *flechettes, SDL_Renderer *render)
   }
 }
 
+void Collide(Flechettes *flechettes, Canars *canars)
+{
+  Flechette *currentFlechette = flechettes->head;
+  Flechette *prevFlechette = NULL;
+
+  while (currentFlechette != NULL)
+  {
+    Canar *currentCanar = canars->head;
+    Canar *prevCanar = NULL;
+
+    int hit = 0;
+
+    while (currentCanar != NULL)
+    {
+      if (CheckCollision(&currentFlechette->destRect, &currentCanar->destRect))
+      {
+        // Supprimer le canard
+        if (prevCanar == NULL)
+            canars->head = currentCanar->next;
+        else
+            prevCanar->next = currentCanar->next;
+
+        free(currentCanar);
+
+        // Supprimer la flechette
+        if (prevFlechette == NULL)
+        {
+          flechettes->head = currentFlechette->next;
+        }
+        else
+        {
+          prevFlechette->next = currentFlechette->next;
+        }
+        free(currentFlechette);
+        flechettes->ammo--;
+
+        hit = 1;
+        break;
+      }
+
+      prevCanar = currentCanar;
+      currentCanar = currentCanar->next;
+    }
+
+    if (hit)
+    {
+        // recommencer depuis le début des fléchettes
+        currentFlechette = (prevFlechette == NULL) ? flechettes->head : prevFlechette->next;
+    }
+    else
+    {
+        prevFlechette = currentFlechette;
+        currentFlechette = currentFlechette->next;
+    }
+  }
+}
+
 void RenderPlayer(Player *player, SDL_Renderer *render)
 {
   SDL_RenderCopy(render, player->texture, &player->rect,&player->destRect);
@@ -53,9 +110,10 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
   MoveFlechettes(flechettes);
   RenderEnnemies(canars, render);
   MoveCanar(canars);
+  Collide(flechettes,canars);
   SDL_Event event;
   SDL_PollEvent(&event);
-  
+
   const Uint8 *keystate = SDL_GetKeyboardState(NULL);
 
   if(keystate[SDL_SCANCODE_RIGHT])
@@ -90,7 +148,7 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
   }
   else
   {
-      spacePressed = 0;
+    spacePressed = 0;
   }
 
   SDL_RenderPresent(render);
@@ -98,8 +156,7 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
 }
 
 void FreeAll(Player *player, Flechettes *flechettes, Canars *canars){
-  free(player);
-  player = NULL;
+  FreePlayer(&player);
   FreeFlechettes(&flechettes);
   FreeCanar(&canars);
 }

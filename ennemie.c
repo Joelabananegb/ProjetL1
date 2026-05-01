@@ -22,7 +22,6 @@ void FreeCanar(Canars **canars)
   (*canars) = NULL;
 }
 
-
 void AddCanar(Canars *canars, int x, int y, SDL_Renderer *render)
 {
   Canar *newCanar = malloc(sizeof(Canar));

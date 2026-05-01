@@ -14,7 +14,7 @@ typedef struct Canar
   SDL_Rect destRect;
   SDL_Texture *texture;
 
-  float velocity;
+  short velocity;
   struct Canar *next;
 } Canar;
 

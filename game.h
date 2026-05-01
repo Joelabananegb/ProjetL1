@@ -9,8 +9,8 @@
 #include "projectile.h"
 #include "ennemie.h"
 
-#define SCREEN_WIDTH 514
-#define SCREEN_HEIGHT 514
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 896
 
 void HomeScreen(SDL_Renderer *, SDL_Texture *);
 void Game(SDL_Renderer *, Player *, Flechettes *, Canars *);

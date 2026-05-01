@@ -10,7 +10,7 @@ Player *InitPlayer(SDL_Renderer *render, const char *imgpath)
   player->velocity = 2;
   player->attack = 10;
   player->health = 100;
-  player->max_health = 100;
+  player->maxHealth = 100;
   player->score = 0;
 
   return player;
@@ -26,8 +26,9 @@ void MoveLeft(Player *player)
 
 void MoveRight(Player *player)
 {
-  if (player->destRect.x <= 290)
+  if (player->destRect.x <= SCREEN_HEIGHT)
   {
+    printf("%d\n",player->destRect.x);
     player->destRect.x += player->velocity;
   }
 }
@@ -47,3 +48,9 @@ void MoveDown(Player *player)
     player->destRect.y += player->velocity;
   }
 }
+
+void FreePlayer(Player **player)
+{
+  free((*player));
+  (*player) = NULL;
+};

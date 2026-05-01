@@ -1,11 +1,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_timer.h>
-#include <SDL2/SDL_ttf.h>
 #include <stdlib.h>
 #include <time.h>
 #include "game.h" // Contient les déclarations liées au jeu (player, monster, etc.)
-#include "ennemie.h"
 
 int main()
 {
@@ -38,10 +35,9 @@ int main()
   player = InitPlayer(render, "./assets/SpaceInvaders.png");
   flechettes = InitFlechettes();
   canars = InitCanar();
-
-  bool running = true;
   LevelOne(render, canars);
 
+  bool running = true;
   while (running)
   {
     HomeScreen(render,background);

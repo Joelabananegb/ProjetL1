@@ -9,7 +9,7 @@
 
 typedef struct Flechette
 {
-  int velocity;
+  short velocity;
   SDL_Rect rect;
   SDL_Rect destRect;
   SDL_Texture *texture;

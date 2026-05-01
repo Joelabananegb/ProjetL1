@@ -9,7 +9,7 @@ LDFLAGS = -lncurses -fsanitize=address `sdl2-config --libs` -lSDL2_image
 TARGET = Game
 
 # Fichiers sources
-SRC = main.c game.c player.c projectile.c
+SRC = main.c game.c player.c projectile.c ennemie.c
 
 # Objets générés automatiquement
 OBJ = $(SRC:.c=.o)

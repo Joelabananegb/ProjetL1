@@ -1,17 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "Canar.h"
+#include "ennemie.h"
 
-ListeCanar *ListeCanarInit(int lvl)
+Canars *InitCanar()
 {
-  ListeCanar *liste = malloc(sizeof(ListeCanar));
-  liste->lvl = lvl;
-  liste->head = NULL;
-  return liste;
+  Canars *canars = malloc(sizeof(Canars));
+  canars->head = NULL;
+  return canars;
 }
 
-void FreeCanar(ListeCanar **canars)
+void FreeCanar(Canars **canars)
 {
   Canar *current = (*canars)->head;
 
@@ -26,47 +22,29 @@ void FreeCanar(ListeCanar **canars)
   (*canars) = NULL;
 }
 
-void AjouterCanar(ListeCanar *canars, int x, int y)
+
+void AddCanar(Canars *canars, int x, int y, SDL_Renderer *render)
 {
   Canar *newCanar = malloc(sizeof(Canar));
-  newCanar->y = y;
-  newCanar->x = x;
-  newCanar->alive = true;
-  newCanar->velocity = canars->lvl;
+  newCanar->rect = (SDL_Rect){0,0, 16, 16};
+  newCanar->destRect = (SDL_Rect){x,y,64,64};
+  newCanar->texture = IMG_LoadTexture(render, "./assets/SpaceInvaders.png");
+  newCanar->velocity = 2;
   newCanar->next = canars->head;
   canars->head = newCanar;
 }
 
-void RenderCanar(ListeCanar *canars, Affichage *grille)
-{
-  Canar *current = canars->head;
-
-  while (current != NULL)
-  {
-    if (current->alive)
-    {
-      if (current->x >= 0 && current->x < grille->hauteur &&
-          current->y >= 0 && current->y < grille->largeur)
-      {
-        strcpy(grille->tab[current->x][current->y], "C");
-      }
-    }
-
-    current = current->next;
-  }
-}
-
-void Forward(ListeCanar *canars)
+void MoveCanar(Canars *canars)
 {
   Canar *current = canars->head;
   Canar *prev = NULL;
 
   while (current != NULL)
   {
-    current->x += current->velocity;
+    current->destRect.x += current->velocity;
 
     // suppression si hors écran
-    if (current->x <= 0)
+    if (current->destRect.x <= 0)
     {
       Canar *tmp = current;
 

@@ -6,6 +6,24 @@ void HomeScreen(SDL_Renderer *render, SDL_Texture *background)
   SDL_RenderCopy(render, background, NULL, &destRect);
 }
 
+void RenderEnnemies(Canars *canars, SDL_Renderer *render)
+{
+  Canar *current = canars->head;
+
+  while (current != NULL)
+  {
+    SDL_RenderCopy(render, current->texture, &current->rect, &current->destRect);
+    current = current->next;
+  }
+}
+
+void LevelOne(SDL_Renderer *render, Canars *canars)
+{
+  for (int i = 0; i <= 5; i++) {
+    AddCanar(canars, i*58,0, render);
+    printf("add\n"); }
+}
+
 void RenderProjectiles(Flechettes *flechettes, SDL_Renderer *render)
 {
   Flechette *current = flechettes->head;
@@ -21,11 +39,13 @@ void RenderPlayer(Player *player, SDL_Renderer *render)
   SDL_RenderCopy(render, player->texture, &player->rect,&player->destRect);
 }
 
-void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes)
+void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars)
 {
   RenderPlayer(player, render);
   RenderProjectiles(flechettes,render);
   MoveFlechettes(flechettes);
+  RenderEnnemies(canars, render);
+  MoveCanar(canars);
   SDL_Event event;
   SDL_PollEvent(&event);
   
@@ -70,8 +90,9 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes)
   SDL_Delay(16);
 }
 
-void FreeAll(Player *player, Flechettes *flechettes){
+void FreeAll(Player *player, Flechettes *flechettes, Canars *canars){
   free(player);
   player = NULL;
   FreeFlechettes(&flechettes);
+  FreeCanar(&canars);
 }

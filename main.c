@@ -5,11 +5,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include "game.h" // Contient les déclarations liées au jeu (player, monster, etc.)
+#include "ennemie.h"
 
 int main()
 {
   Player *player = NULL;
   Flechettes *flechettes = NULL;
+  Canars *canars = NULL;
 
   SDL_Window *window = SDL_CreateWindow("Space Shooter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT,0);
   if (!window)
@@ -35,8 +37,11 @@ int main()
   //InitGame(render, player);
   player = InitPlayer(render, "./assets/SpaceInvaders.png");
   flechettes = InitFlechettes();
+  canars = InitCanar();
 
   bool running = true;
+  LevelOne(render, canars);
+
   while (running)
   {
     HomeScreen(render,background);
@@ -48,10 +53,10 @@ int main()
         running = false;
       }
     }
-    Game(render, player, flechettes);
+    Game(render, player, flechettes, canars);
   }
 
-  FreeAll(player, flechettes);
+  FreeAll(player, flechettes, canars);
   SDL_DestroyRenderer(render);
   SDL_DestroyWindow(window);
   SDL_Quit();

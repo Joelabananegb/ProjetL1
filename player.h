@@ -1,23 +1,36 @@
 #ifndef CANON_H
 #define CANON_H
 
-#include "Affichage.h"
-#include "Flechette.h"
+#include <stdlib.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
-enum action_canon {Gauche_canon, Droite_canon, Tir};
 
 typedef struct{
-  int largeur, hauteur;   /* Taille du rectangle de la base du canon */
-  int pos_min, pos_max;   /* Position min (à gauche) et max (à droite) */
-  int xpos, ypos;         /* Case supérieure gauche de la position du Canon */ 
-  int pas;                /* Nombre de cases de déplacement d'un Canon à chaque appui */
-  int ypos_old;           /* Position précédente du Canon */ 
-} Canon;
+  //int x, y;         /* Case supérieure gauche de la position du Player */ 
+  //int ypos_old;           /* Position précédente du Player */ 
+  int velocity;                /* Nombre de cases de déplacement d'un Player à chaque appui */
+  int health, max_health;
+  int score, high_score;
+  int attack;
 
-Canon *CanonInitialiser(int, int, int);
-void CanonDesallouer(Canon **);
-void CanonAction(Canon *, enum action_canon, ListeFlechette *);
-void CanonAfficher(Canon *, Affichage* );
+  SDL_Rect rect;
+  SDL_Rect destRect;
+  SDL_Texture *texture;
+
+  bool alive;
+
+} Player;
+
+Player *InitPlayer(SDL_Renderer *, const char *);
+void MoveLeft(Player *);
+void MoveRight(Player *);
+void MoveUp(Player *);
+void MoveDown(Player *);
+
+//void PlayerDesallouer(Canon **);
+//void PlayerAction(Canon *, enum action_canon, ListeFlechette *);
+//void PlayerAfficher(Canon *, Affichage* );
 
 #endif 
 

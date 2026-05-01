@@ -1,31 +1,43 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include "Canon.h"
+#include "player.h"
 
-
-Canon *CanonInitialiser(int posMin, int posMax, int hauteurGrille)
+Player *InitPlayer(SDL_Renderer *render, const char *imgpath)
 {
-   Canon *canon = malloc(sizeof(Canon));
-   canon->hauteur = 2;
-   canon->largeur = 11;
-   canon->xpos = hauteurGrille-canon->hauteur - 1;
-   canon->ypos = (posMin + posMax - canon->largeur) / 2; 
-   canon->ypos_old = canon->xpos; 
-   canon->pos_min = posMin + 3; 
-   canon->pos_max = posMax - 3;
-   canon->pas = 1;
-   return canon;
+  Player *player = malloc(sizeof(Player));
+  if (!player) return NULL;
+  player->rect = (SDL_Rect){64, 0, 16, 16};
+  player->destRect = (SDL_Rect){150,250,64,64};
+  player->texture = IMG_LoadTexture(render,imgpath);
+  player->velocity = 2;
+  player->attack = 10;
+  player->health = 100;
+  player->max_health = 100;
+  player->score = 0;
+
+  return player;
 }
 
-void CanonDesallouer(Canon** canon)
+void MoveLeft(Player *player)
 {
-  free(*canon);
-  *canon = NULL;
+  player->destRect.x -= player->velocity;
+}
+
+void MoveRight(Player *player)
+{
+  player->destRect.x += player->velocity;
+}
+
+void MoveUp(Player *player)
+{
+  player->destRect.y -= player->velocity;
+}
+
+void MoveDown(Player *player)
+{
+  player->destRect.y += player->velocity;
 }
 
 
-void CanonAction(Canon *canon, enum action_canon actC, ListeFlechette *Flechettes)
+/*void CanonAction(Canon *canon, enum action_canon actC, ListeFlechette *Flechettes)
 {
   canon->ypos_old = canon->ypos; 
 
@@ -68,4 +80,4 @@ void CanonAfficher(Canon *canon, Affichage* grille)
     strcpy(grille->tab[canon->xpos-2][canon->ypos + canon->largeur / 2], "♖");//"\33[44m ");
     strcpy(grille->tab[canon->xpos-2][canon->ypos + canon->largeur / 2+1], "♖");//"\33[44m ");
   }
-}
+}*/

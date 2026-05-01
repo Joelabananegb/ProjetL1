@@ -8,6 +8,8 @@
 
 int main()
 {
+  Player *player = NULL;
+
   SDL_Window *window = SDL_CreateWindow("Space Shooter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT,0);
   if (!window)
   {
@@ -29,11 +31,13 @@ int main()
     return 1;
   }
 
-  HomeScreen(render,background);
-
+  //InitGame(render, player);
+  player = InitPlayer(render, "./assets/SpaceInvaders.png");
   bool running = true;
   while (running)
   {
+
+    HomeScreen(render,background);
     SDL_Event event;
     while(SDL_PollEvent(&event))
     {
@@ -42,10 +46,11 @@ int main()
         running = false;
       }
     }
-    SDL_RenderPresent(render);
-    SDL_Delay(16);
+
+    Game(render, player);
   }
 
+  FreeAll(player);
   SDL_DestroyRenderer(render);
   SDL_DestroyWindow(window);
   SDL_Quit();

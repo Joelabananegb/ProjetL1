@@ -1,7 +1,3 @@
-Voici une version propre sans emojis :
-
-⸻
-
 Space Invaders Clone (SDL)
 
 Description
@@ -9,7 +5,6 @@ Description
 Petit jeu inspiré de Space Invaders développé en C avec SDL.
 Le joueur contrôle un vaisseau et doit éliminer des ennemis tout en survivant à leurs attaques.
 
-⸻
 
 Roadmap / TODO
 
@@ -25,7 +20,6 @@ Core Gameplay
     * Tir double
     * Tir rapide
 
-⸻
 
 Player
 
@@ -34,14 +28,12 @@ Player
 * Respawn après mort
 * Mort du joueur → Game Over
 
-⸻
 
 Enemies
 
 * Attaques aléatoires
 * IA basique (mouvement et tir)
 
-⸻
 
 Améliorations possibles (bonus)
 
@@ -50,7 +42,6 @@ Améliorations possibles (bonus)
 * Effets visuels (explosions, particules)
 * Background animé
 
-⸻
 
 Technologies
 
@@ -58,7 +49,6 @@ Technologies
 * SDL2
 * SDL_image
 
-⸻
 
 Objectif
 
@@ -68,14 +58,7 @@ Créer une version moderne et propre de Space Invaders avec :
 * une architecture claire
 * des mécaniques évolutives
 
-⸻
 
 État du projet
 
 En cours de développement
-
-⸻
-
-Notes
-
-Ce projet est en cours d’amélioration progressive avec ajout de nouvelles fonctionnalités et optimisation du code.

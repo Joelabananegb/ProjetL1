@@ -1,5 +1,10 @@
 #include "game.h"
 
+bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
+{
+  return SDL_HasIntersection(firstRect, secondRect);
+}
+
 void HomeScreen(SDL_Renderer *render, SDL_Texture *background)
 {
   SDL_Rect destRect = {0,0,514,514};
@@ -19,9 +24,11 @@ void RenderEnnemies(Canars *canars, SDL_Renderer *render)
 
 void LevelOne(SDL_Renderer *render, Canars *canars)
 {
-  for (int i = 0; i <= 5; i++) {
+  for (int i = 0; i <= 5; i++)
+  {
     AddCanar(canars, i*58,0, render);
-    printf("add\n"); }
+    AddCanar(canars, i*58,40,render);
+  }
 }
 
 void RenderProjectiles(Flechettes *flechettes, SDL_Renderer *render)

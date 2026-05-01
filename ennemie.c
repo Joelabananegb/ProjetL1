@@ -29,7 +29,7 @@ void AddCanar(Canars *canars, int x, int y, SDL_Renderer *render)
   newCanar->rect = (SDL_Rect){0,0, 16, 16};
   newCanar->destRect = (SDL_Rect){x,y,64,64};
   newCanar->texture = IMG_LoadTexture(render, "./assets/SpaceInvaders.png");
-  newCanar->velocity = 2;
+  newCanar->velocity = 1;
   newCanar->next = canars->head;
   canars->head = newCanar;
 }
@@ -41,10 +41,10 @@ void MoveCanar(Canars *canars)
 
   while (current != NULL)
   {
-    current->destRect.x += current->velocity;
+    current->destRect.y += current->velocity;
 
     // suppression si hors écran
-    if (current->destRect.x <= 0)
+    if (current->destRect.y >= 514)
     {
       Canar *tmp = current;
 

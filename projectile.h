@@ -14,7 +14,6 @@ typedef struct Flechette
   SDL_Rect destRect;
   SDL_Texture *texture;
   struct Flechette *next;
-
 } Flechette;
 
 typedef struct

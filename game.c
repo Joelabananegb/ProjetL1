@@ -21,11 +21,6 @@ void RenderPlayer(Player *player, SDL_Renderer *render)
   SDL_RenderCopy(render, player->texture, &player->rect,&player->destRect);
 }
 
-/*void InitGame(SDL_Renderer *render, Player *player)
-{
-  player = InitPlayer(render, "./assets/SpaceInvaders.png");
-}*/
-
 void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes)
 {
   RenderPlayer(player, render);

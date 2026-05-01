@@ -23,7 +23,7 @@ void FreeFlechettes(Flechettes **flechettes)
 
 void AddFlechette(Flechettes *flechettes, int x, int y, SDL_Renderer *render)
 {
-  if (flechettes->ammo <= MAX_AMMO)
+  if (flechettes->ammo < MAX_AMMO)
   {
     Flechette *newFlechette = malloc(sizeof(Flechette));
     newFlechette->rect = (SDL_Rect){32, 0, 16, 16};

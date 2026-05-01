@@ -7,8 +7,6 @@
 
 
 typedef struct{
-  //int x, y;         /* Case supérieure gauche de la position du Player */ 
-  //int ypos_old;           /* Position précédente du Player */ 
   int velocity;                /* Nombre de cases de déplacement d'un Player à chaque appui */
   int health, max_health;
   int score, high_score;
@@ -19,7 +17,6 @@ typedef struct{
   SDL_Texture *texture;
 
   bool alive;
-
 } Player;
 
 Player *InitPlayer(SDL_Renderer *, const char *);

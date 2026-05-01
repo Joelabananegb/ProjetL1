@@ -6,6 +6,7 @@
 
 int main()
 {
+  srand(time(NULL));
   Player *player = NULL;
   Flechettes *flechettes = NULL;
   Canars *canars = NULL;

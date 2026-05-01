@@ -41,7 +41,15 @@ void RenderProjectiles(Flechettes *flechettes, SDL_Renderer *render)
   }
 }
 
-void Collide(Flechettes *flechettes, Canars *canars)
+void UpdateScore(Player *player){
+  if (player->score >= player->highScore)
+  {
+    player->highScore = player->score;
+  }
+  player->score += rand() % 10;
+}
+
+void Collide(Flechettes *flechettes, Canars *canars, Player *player)
 {
   Flechette *currentFlechette = flechettes->head;
   Flechette *prevFlechette = NULL;
@@ -76,7 +84,7 @@ void Collide(Flechettes *flechettes, Canars *canars)
         }
         free(currentFlechette);
         flechettes->ammo--;
-
+        UpdateScore(player);
         hit = 1;
         break;
       }
@@ -105,12 +113,13 @@ void RenderPlayer(Player *player, SDL_Renderer *render)
 
 void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars)
 {
+  printf("%d\n",player->score);
   RenderPlayer(player, render);
   RenderProjectiles(flechettes,render);
   MoveFlechettes(flechettes);
   RenderEnnemies(canars, render);
   MoveCanar(canars);
-  Collide(flechettes,canars);
+  Collide(flechettes,canars, player);
   SDL_Event event;
   SDL_PollEvent(&event);
 

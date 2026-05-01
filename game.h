@@ -22,4 +22,6 @@ void FreeAll(Player *, Flechettes *, Canars *);
 void LevelOne(SDL_Renderer *, Canars *);
 bool CheckCollision(SDL_Rect *, SDL_Rect *);
 bool CheckCollisionByMe(SDL_Rect *, SDL_Rect *);
+void Collide(Flechettes *flechettes, Canars *canars, Player *);
+void UpdateScore(Player *);
 #endif 

@@ -24,10 +24,10 @@ void RenderEnnemies(Canars *canars, SDL_Renderer *render)
 
 void LevelOne(SDL_Renderer *render, Canars *canars)
 {
-  for (int i = 0; i <= 5; i++)
+  for (int i = 0; i <= 12; i++)
   {
-    AddCanar(canars, i*58,0, render);
-    AddCanar(canars, i*58,40,render);
+    AddCanar(canars, i*60,0, render);
+    AddCanar(canars, i*60,40,render);
   }
 }
 

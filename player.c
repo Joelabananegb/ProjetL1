@@ -5,14 +5,13 @@ Player *InitPlayer(SDL_Renderer *render, const char *imgpath)
   Player *player = malloc(sizeof(Player));
   if (!player) return NULL;
   player->rect = (SDL_Rect){64, 0, 16, 16};
-  player->destRect = (SDL_Rect){150,250,64,64};
-  player->texture = IMG_LoadTexture(render,imgpath);
+  player->destRect = (SDL_Rect){SCREEN_WIDTH/2 - 50, SCREEN_HEIGHT/2 + 180, 64, 64};
+  player->texture = IMG_LoadTexture(render, imgpath);
   player->velocity = 2;
   player->attack = 10;
   player->health = 100;
   player->maxHealth = 100;
   player->score = 0;
-
   return player;
 }
 
@@ -26,9 +25,8 @@ void MoveLeft(Player *player)
 
 void MoveRight(Player *player)
 {
-  if (player->destRect.x <= SCREEN_HEIGHT)
+  if (player->destRect.x <= SCREEN_WIDTH - 80)
   {
-    printf("%d\n",player->destRect.x);
     player->destRect.x += player->velocity;
   }
 }
@@ -43,7 +41,7 @@ void MoveUp(Player *player)
 
 void MoveDown(Player *player)
 {
-  if (player->destRect.y <= 290)
+  if (player->destRect.y <= SCREEN_HEIGHT - 80)
   {
     player->destRect.y += player->velocity;
   }

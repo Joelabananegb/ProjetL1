@@ -5,8 +5,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 896
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
 
 typedef struct{
   short velocity;                /* Nombre de cases de déplacement d'un Player à chaque appui */

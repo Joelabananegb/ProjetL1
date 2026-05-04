@@ -11,6 +11,12 @@ int main()
   Flechettes *flechettes = NULL;
   Canars *canars = NULL;
 
+  if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+  {
+    SDL_Log("Erreur SDL_Init: %s", SDL_GetError());
+    return 1;
+  }
+
   SDL_Window *window = SDL_CreateWindow("Space Shooter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT,0);
   if (!window)
   {
@@ -19,7 +25,7 @@ int main()
   }
   
   SDL_Renderer *render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-  if (!window)
+  if (!render)
   {
     SDL_Log("Erreur de création render: %s", SDL_GetError());
     return 1;
@@ -57,6 +63,7 @@ int main()
   }
 
   FreeAll(player, flechettes, canars);
+  SDL_DestroyTexture(background);
   SDL_DestroyRenderer(render);
   SDL_DestroyWindow(window);
   SDL_Quit();

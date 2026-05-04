@@ -12,6 +12,7 @@ Player *InitPlayer(SDL_Renderer *render, const char *imgpath)
   player->health = 100;
   player->maxHealth = 100;
   player->score = 0;
+  player->alive = true;
   return player;
 }
 

@@ -28,7 +28,7 @@ void AddFlechette(Flechettes *flechettes, int x, int y, SDL_Renderer *render)
     newFlechette->rect = (SDL_Rect){32, 0, 16, 16};
     newFlechette->destRect = (SDL_Rect){x,y,64,64};
     newFlechette->texture = IMG_LoadTexture(render,"./assets/SpaceInvaders.png");
-    newFlechette->velocity = 3;
+    newFlechette->velocity = 5;
     newFlechette->next = flechettes->head;
     flechettes->head = newFlechette;
     flechettes->ammo++;

@@ -106,6 +106,26 @@ void Collide(Flechettes *flechettes, Canars *canars, Player *player)
   }
 }
 
+void CollideWithPlayer(Player * player, Canars *canars)
+{
+  Canar *currentCanar = canars->head;
+  Canar *prevCanar = NULL;
+  while(currentCanar != NULL)
+  {
+    if(CheckCollision(&player->destRect, &currentCanar->destRect)){
+      if (prevCanar == NULL)
+      {
+        canars->head = currentCanar->next;
+      }else
+      {
+        prevCanar->next = currentCanar->next;
+      }
+      free(currentCanar);
+    }
+  }
+  player->health -= 25;
+}
+
 void RenderPlayer(Player *player, SDL_Renderer *render)
 {
   SDL_RenderCopy(render, player->texture, &player->rect,&player->destRect);

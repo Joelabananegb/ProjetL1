@@ -50,7 +50,10 @@ int main()
         running = false;
       }
     }
-    Game(render, player, flechettes, canars);
+    if (player->alive)
+    {
+      Game(render, player, flechettes, canars);
+    }
   }
 
   FreeAll(player, flechettes, canars);

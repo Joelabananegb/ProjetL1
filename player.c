@@ -50,6 +50,11 @@ void MoveDown(Player *player)
 
 void FreePlayer(Player **player)
 {
-  free((*player));
-  (*player) = NULL;
-};
+  if (!player || !(*player)) return;
+
+  if ((*player)->texture)
+    SDL_DestroyTexture((*player)->texture);
+
+  free(*player);
+  *player = NULL;
+}

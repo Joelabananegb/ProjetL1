@@ -14,6 +14,9 @@ void FreeFlechettes(Flechettes **flechettes)
   {
     Flechette *tmp = current;
     current = current->next;
+    if (tmp->texture){
+      SDL_DestroyTexture(tmp->texture);
+    }
     free(tmp);
   }
   free((*flechettes));

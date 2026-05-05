@@ -15,6 +15,9 @@ void FreeCanar(Canars **canars)
   {
     Canar *tmp = current;
     current = current->next;
+    if (tmp->texture){
+      SDL_DestroyTexture(tmp->texture);
+    }
     free(tmp);
   }
   

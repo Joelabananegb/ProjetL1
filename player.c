@@ -12,6 +12,7 @@ Player *InitPlayer(SDL_Renderer *render, const char *imgpath)
   player->health = 100;
   player->maxHealth = 100;
   player->score = 0;
+  player->alive = true;
   return player;
 }
 
@@ -49,6 +50,11 @@ void MoveDown(Player *player)
 
 void FreePlayer(Player **player)
 {
-  free((*player));
-  (*player) = NULL;
-};
+  if (!player || !(*player)) return;
+
+  if ((*player)->texture)
+    SDL_DestroyTexture((*player)->texture);
+
+  free(*player);
+  *player = NULL;
+}

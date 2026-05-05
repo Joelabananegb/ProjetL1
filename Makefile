@@ -4,6 +4,7 @@ CC = gcc
 # Flags
 CFLAGS = -Wall -Wextra -g -fsanitize=address `sdl2-config --cflags` -lSDL2_image
 LDFLAGS = -lncurses -fsanitize=address `sdl2-config --libs` -lSDL2_image
+ASAN = ASAN_OPTIONS=detect_leaks=0
 
 # Nom de l'exécutable
 TARGET = Game
@@ -34,4 +35,4 @@ re: clean all
 
 # Lancer le programme
 run: $(TARGET)
-	./$(TARGET)
+	$(ASAN) ./$(TARGET)

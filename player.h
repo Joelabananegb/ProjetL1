@@ -23,6 +23,7 @@ typedef struct{
 } Player;
 
 Player *InitPlayer(SDL_Renderer *, const char *);
+void ResetPlyer(Player *);
 void MoveLeft(Player *);
 void MoveRight(Player *);
 void MoveUp(Player *);

@@ -152,9 +152,8 @@ void RenderPlayer(Player *player, SDL_Renderer *render)
   SDL_RenderCopy(render, player->texture, &player->rect,&player->destRect);
 }
 
-void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars)
+void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars)
 {
-  printf("Score: %d | Heatl: %d\n",player->score,player->health);
   RenderPlayer(player, render);
   RenderPlayerHeart(player, render);
   RenderProjectiles(flechettes,render);
@@ -163,6 +162,12 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
   MoveCanar(canars);
   Collide(flechettes,canars, player);
   CollideWithPlayer(player, canars);
+}
+
+void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars)
+{
+  printf("Score: %d | Heatl: %d\n",player->score,player->health);
+  RenderAll(render, player, flechettes, canars);
   SDL_Event event;
   SDL_PollEvent(&event);
 

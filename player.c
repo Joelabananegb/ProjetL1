@@ -1,6 +1,6 @@
 #include "player.h"
 
-Player *InitPlayer(SDL_Renderer *render, const char *imgpath)
+Player *InitPlayer(SDL_Renderer *render, const char *imgpath, const char *imgpathHearth)
 {
   Player *player = malloc(sizeof(Player));
   if (!player) return NULL;
@@ -13,6 +13,9 @@ Player *InitPlayer(SDL_Renderer *render, const char *imgpath)
   player->maxHealth = 100;
   player->score = 0;
   player->alive = true;
+  player->heartTexture = IMG_LoadTexture(render, imgpathHearth);
+  player->hearthRect = (SDL_Rect){80,100,16,16};
+  player->heartDestRect = (SDL_Rect){0,0,64,64};
   return player;
 }
 

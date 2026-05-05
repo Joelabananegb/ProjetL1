@@ -50,7 +50,7 @@ int main()
     goto cleanup;
   }
 
-  player = InitPlayer(render, "./assets/SpaceInvaders.png");
+  player = InitPlayer(render, "./assets/SpaceInvaders.png","./assets/SpaceInvaders_Icons.png");
   flechettes = InitFlechettes();
   canars = InitCanar();
   LevelOne(render, canars);

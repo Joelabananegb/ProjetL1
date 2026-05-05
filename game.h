@@ -26,4 +26,5 @@ bool CheckCollisionByMe(SDL_Rect *, SDL_Rect *);
 void Collide(Flechettes *, Canars *, Player *);
 void CollideWithPlayer(Player *, Canars *);
 void UpdateScore(Player *);
+void RenderPlayerHeart(Player *,SDL_Renderer *);
 #endif 

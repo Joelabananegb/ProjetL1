@@ -5,6 +5,14 @@ bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
   return SDL_HasIntersection(firstRect, secondRect);
 }
 
+void RenderPlayerHeart(Player *player, SDL_Renderer *render)
+{
+  for (int i=0; i < player->health; i+=25)
+  {
+    player->heartDestRect = (SDL_Rect){i, 0, 16,16};
+    SDL_RenderCopy(render,player->heartTexture,&player->hearthRect,&player->heartDestRect);
+  }
+}
 void HomeScreen(SDL_Renderer *render, SDL_Texture *background)
 {
   SDL_Rect destRect = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
@@ -135,6 +143,7 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
 {
   printf("%d\n",player->score);
   RenderPlayer(player, render);
+  RenderPlayerHeart(player, render);
   RenderProjectiles(flechettes,render);
   MoveFlechettes(flechettes);
   RenderEnnemies(canars, render);

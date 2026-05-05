@@ -61,3 +61,15 @@ void FreePlayer(Player **player)
   free(*player);
   *player = NULL;
 }
+
+
+void PlayerDamage(Player *player)
+{
+  if (player->alive && player->health != 0)
+  {
+    player->health -= 25;
+  }else
+  {
+    player->alive = false;
+  }
+}

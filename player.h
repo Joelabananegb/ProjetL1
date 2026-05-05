@@ -31,9 +31,6 @@ void MoveLeft(Player *);
 void MoveRight(Player *);
 void MoveUp(Player *);
 void MoveDown(Player *);
-
+void PlayerDamage(Player *);
 void FreePlayer(Player **);
-
 #endif 
-
-

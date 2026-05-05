@@ -121,6 +121,7 @@ void CollideWithPlayer(Player *player, Canars *canars)
   while(currentCanar != NULL)
   {
     if(CheckCollision(&player->destRect, &currentCanar->destRect)){
+      printf("Collision\n");
       if (prevCanar == NULL)
       {
         canars->head = currentCanar->next;
@@ -128,8 +129,14 @@ void CollideWithPlayer(Player *player, Canars *canars)
       {
         prevCanar->next = currentCanar->next;
       }
-      player->health -= 25;
-      free(currentCanar);
+      Canar *tmp = currentCanar;
+      currentCanar = currentCanar->next;
+      PlayerDamage(player);
+      free(tmp);
+    }else
+    {
+      prevCanar = currentCanar;
+      currentCanar = currentCanar->next;
     }
   }
 }
@@ -149,7 +156,7 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
   RenderEnnemies(canars, render);
   MoveCanar(canars);
   Collide(flechettes,canars, player);
- // CollideWithPlayer(player, canars);
+  CollideWithPlayer(player, canars);
   SDL_Event event;
   SDL_PollEvent(&event);
 

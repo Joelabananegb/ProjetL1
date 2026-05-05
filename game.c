@@ -9,7 +9,7 @@ void RenderPlayerHeart(Player *player, SDL_Renderer *render)
 {
   for (int i=0; i < player->health; i+=25)
   {
-    player->heartDestRect = (SDL_Rect){i, 0, 16,16};
+    player->heartDestRect = (SDL_Rect){i+10, 10, 16,16};
     SDL_RenderCopy(render,player->heartTexture,&player->hearthRect,&player->heartDestRect);
   }
 }
@@ -114,7 +114,7 @@ void Collide(Flechettes *flechettes, Canars *canars, Player *player)
   }
 }
 
-void CollideWithPlayer(Player * player, Canars *canars)
+void CollideWithPlayer(Player *player, Canars *canars)
 {
   Canar *currentCanar = canars->head;
   Canar *prevCanar = NULL;
@@ -128,10 +128,10 @@ void CollideWithPlayer(Player * player, Canars *canars)
       {
         prevCanar->next = currentCanar->next;
       }
+      player->health -= 25;
       free(currentCanar);
     }
   }
-  player->health -= 25;
 }
 
 void RenderPlayer(Player *player, SDL_Renderer *render)
@@ -141,7 +141,7 @@ void RenderPlayer(Player *player, SDL_Renderer *render)
 
 void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars)
 {
-  printf("%d\n",player->score);
+  printf("Score: %d | Heatl: %d\n",player->score,player->health);
   RenderPlayer(player, render);
   RenderPlayerHeart(player, render);
   RenderProjectiles(flechettes,render);
@@ -149,6 +149,7 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
   RenderEnnemies(canars, render);
   MoveCanar(canars);
   Collide(flechettes,canars, player);
+ // CollideWithPlayer(player, canars);
   SDL_Event event;
   SDL_PollEvent(&event);
 

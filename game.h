@@ -27,4 +27,5 @@ void Collide(Flechettes *, Canars *, Player *);
 void CollideWithPlayer(Player *, Canars *);
 void UpdateScore(Player *);
 void RenderPlayerHeart(Player *,SDL_Renderer *);
+void Pause(SDL_Renderer *, const char *);
 #endif 

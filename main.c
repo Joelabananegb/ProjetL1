@@ -42,7 +42,7 @@ int main()
     SDL_Log("Erreur renderer: %s", SDL_GetError());
     goto cleanup;
   }
-SDL_Texture *background = IMG_LoadTexture(render,"./assets/SpaceInvaders_Background.png");
+  SDL_Texture *background = IMG_LoadTexture(render,"./assets/SpaceInvaders_Background.png");
   if (!background)
   {
     SDL_Log("Erreur background: %s", IMG_GetError());

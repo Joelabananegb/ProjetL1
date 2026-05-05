@@ -1,5 +1,11 @@
 #include "game.h"
 
+void Pause(SDL_Renderer *render,const char *path)
+{
+  SDL_Texture *pauseScreen = IMG_LoadTexture(render,path);
+  SDL_RenderCopy(render, pauseScreen, NULL, NULL);
+}
+
 bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
 {
   return SDL_HasIntersection(firstRect, secondRect);

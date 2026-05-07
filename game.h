@@ -18,6 +18,7 @@ void GameOver(SDL_Renderer *);
 
 void InitGame(SDL_Renderer *, Player *);
 void FreeAll(Player *, Flechettes *, Canars *);
+void LevelTwo(SDL_Renderer *, Canars *);
 void LevelOne(SDL_Renderer *, Canars *);
 
 bool CheckCollision(SDL_Rect *, SDL_Rect *);

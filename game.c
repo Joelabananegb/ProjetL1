@@ -39,6 +39,16 @@ void RenderEnnemies(Canars *canars, SDL_Renderer *render)
   }
 }
 
+void LevelTwo(SDL_Renderer *render, Canars *canars)
+{
+  for (int i = 0; i < 2; i++)
+  {
+    for (int j = 0; j <= 12-i; j++)
+    {
+      AddCanar(canars, j*60 + i*30,62*i,render);
+    }
+  }
+}
 void LevelOne(SDL_Renderer *render, Canars *canars)
 {
   for (int i = 0; i <= 12; i++)

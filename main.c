@@ -52,7 +52,7 @@ int main()
   player = InitPlayer(render, "./assets/SpaceInvaders.png","./assets/SpaceInvaders_Icons.png");
   flechettes = InitFlechettes();
   canars = InitCanar();
-  LevelOne(render, canars);
+  LevelTwo(render, canars);
 
   bool running = true;
   while (running)

@@ -11,7 +11,7 @@ Roadmap / TODO
 Core Gameplay
 
 * Animation des sprites
-* Système de pause
+* Système de pause Donne
 * Quitter le jeu proprement
 * Écran de Game Over
 * Menu principal (Start Game)

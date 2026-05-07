@@ -62,14 +62,13 @@ void FreePlayer(Player **player)
   *player = NULL;
 }
 
-
 void PlayerDamage(Player *player)
 {
-  if (player->alive && player->health != 0)
-  {
-    player->health -= 25;
-  }else
+  if (player->alive && player->health <= 0)
   {
     player->alive = false;
+  }else
+  {
+    player->health -= 25;
   }
 }

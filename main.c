@@ -65,10 +65,11 @@ int main()
       if (event.type == SDL_QUIT)
         running = false;
     }
-
-    if (player->alive){
+    if (player->alive)
+    {
       Game(render, player, flechettes, canars);
-    }else
+    }
+    else
     {
       goto cleanup;
     }

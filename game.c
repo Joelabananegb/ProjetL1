@@ -1,9 +1,12 @@
 #include "game.h"
 
+bool started = true;
+
 void Pause(SDL_Renderer *render,const char *path)
 {
   SDL_Texture *pauseScreen = IMG_LoadTexture(render,path);
-  SDL_RenderCopy(render, pauseScreen, NULL, NULL);
+  SDL_Rect rect = {0,0,SCREEN_WIDTH, SCREEN_HEIGHT};
+  SDL_RenderCopy(render, pauseScreen, NULL, &rect);
 }
 
 bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
@@ -13,12 +16,13 @@ bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
 
 void RenderPlayerHeart(Player *player, SDL_Renderer *render)
 {
-  for (int i=0; i < player->health; i+=25)
+  for (int i = 0; i < player->health; i+=25)
   {
     player->heartDestRect = (SDL_Rect){i+10, 10, 16,16};
     SDL_RenderCopy(render,player->heartTexture,&player->hearthRect,&player->heartDestRect);
   }
 }
+
 void HomeScreen(SDL_Renderer *render, SDL_Texture *background)
 {
   SDL_Rect destRect = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
@@ -26,8 +30,7 @@ void HomeScreen(SDL_Renderer *render, SDL_Texture *background)
 }
 
 void RenderEnnemies(Canars *canars, SDL_Renderer *render)
-{
-  Canar *current = canars->head;
+{ Canar *current = canars->head;
 
   while (current != NULL)
   {
@@ -120,6 +123,7 @@ void Collide(Flechettes *flechettes, Canars *canars, Player *player)
   }
 }
 
+
 void CollideWithPlayer(Player *player, Canars *canars)
 {
   Canar *currentCanar = canars->head;
@@ -127,11 +131,11 @@ void CollideWithPlayer(Player *player, Canars *canars)
   while(currentCanar != NULL)
   {
     if(CheckCollision(&player->destRect, &currentCanar->destRect)){
-      printf("Collision\n");
       if (prevCanar == NULL)
       {
         canars->head = currentCanar->next;
-      }else
+      }
+      else
       {
         prevCanar->next = currentCanar->next;
       }
@@ -139,7 +143,8 @@ void CollideWithPlayer(Player *player, Canars *canars)
       currentCanar = currentCanar->next;
       PlayerDamage(player);
       free(tmp);
-    }else
+    }
+    else
     {
       prevCanar = currentCanar;
       currentCanar = currentCanar->next;
@@ -164,56 +169,72 @@ void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Can
   CollideWithPlayer(player, canars);
 }
 
-void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars)
-{
-  printf("Score: %d | Heatl: %d\n",player->score,player->health);
-  RenderAll(render, player, flechettes, canars);
-  SDL_Event event;
-  SDL_PollEvent(&event);
-
-  const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-
-  if(keystate[SDL_SCANCODE_RIGHT])
-  {
-    MoveRight(player);
-  }
-
-  if (keystate[SDL_SCANCODE_LEFT])
-  {
-    MoveLeft(player);
-  }
-
-  if(keystate[SDL_SCANCODE_DOWN])
-  {
-    MoveDown(player);
-  }
-
-  if (keystate[SDL_SCANCODE_UP])
-  {
-    MoveUp(player);
-  }
-  
-  static int spacePressed = 0;
-
-  if (keystate[SDL_SCANCODE_SPACE])
-  {
-    if (!spacePressed)
-    {
-      AddFlechette(flechettes, player->destRect.x + 4, player->destRect.y - 32, render);
-    }
-    spacePressed = 1;
-  }
-  else
-  {
-    spacePressed = 0;
-  }
-
-  SDL_RenderPresent(render);
-  SDL_Delay(16);
-}
 
 void FreeAll(Player *player, Flechettes *flechettes, Canars *canars){
   FreePlayer(&player);
   FreeFlechettes(&flechettes);
   FreeCanar(&canars);
 }
+
+void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars)
+{
+  printf("Score: %d | Heatl: %d | started %d\n",player->score,player->health, started);
+
+
+  SDL_Event event;
+  SDL_PollEvent(&event);
+
+  const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+  
+  if (started)
+  {
+    RenderAll(render, player, flechettes, canars);
+      if(keystate[SDL_SCANCODE_RIGHT])
+      {
+        MoveRight(player);
+      }
+
+      if (keystate[SDL_SCANCODE_LEFT])
+      {
+        MoveLeft(player);
+      }
+
+      if(keystate[SDL_SCANCODE_DOWN])
+      {
+        MoveDown(player);
+      }
+
+      if (keystate[SDL_SCANCODE_UP])
+      {
+        MoveUp(player);
+      }
+      
+      static int spacePressed = 0;
+
+      if (keystate[SDL_SCANCODE_SPACE])
+      {
+        if (!spacePressed)
+        {
+          AddFlechette(flechettes, player->destRect.x + 4, player->destRect.y - 32, render);
+        }
+        spacePressed = 1;
+      }
+      else
+      {
+        spacePressed = 0;
+      }
+  }else{
+    Pause(render,"./assets/paused.png");
+  }
+
+  if (keystate[SDL_SCANCODE_ESCAPE] && started && player->alive)
+  {
+    started = false;
+  } else if (keystate[SDL_SCANCODE_Q] && !started && player->alive)
+  {
+    started = true;
+  }
+  SDL_RenderPresent(render);
+  SDL_Delay(16);
+}
+

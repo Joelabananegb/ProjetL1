@@ -15,18 +15,23 @@
 void HomeScreen(SDL_Renderer *, SDL_Texture *);
 void Game(SDL_Renderer *, Player *, Flechettes *, Canars *);
 void GameOver(SDL_Renderer *);
-void RenderPlayer(Player *, SDL_Renderer *);
-void RenderProjectiles(Flechettes *, SDL_Renderer *);
-void RenderEnnemies(Canars *, SDL_Renderer *);
+
 void InitGame(SDL_Renderer *, Player *);
 void FreeAll(Player *, Flechettes *, Canars *);
 void LevelOne(SDL_Renderer *, Canars *);
+
 bool CheckCollision(SDL_Rect *, SDL_Rect *);
 bool CheckCollisionByMe(SDL_Rect *, SDL_Rect *);
 void Collide(Flechettes *, Canars *, Player *);
 void CollideWithPlayer(Player *, Canars *);
+
 void UpdateScore(Player *);
+
 void RenderPlayerHeart(Player *,SDL_Renderer *);
 void Pause(SDL_Renderer *, const char *);
 void RenderAll(SDL_Renderer *, Player *, Flechettes *, Canars *);
+void RenderPlayer(Player *, SDL_Renderer *);
+void RenderProjectiles(Flechettes *, SDL_Renderer *);
+void RenderEnnemies(Canars *, SDL_Renderer *);
+
 #endif 

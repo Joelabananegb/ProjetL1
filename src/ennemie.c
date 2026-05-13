@@ -4,6 +4,7 @@ Canars *InitCanar()
 {
   Canars *canars = malloc(sizeof(Canars));
   canars->head = NULL;
+  canars->numberOfCanar = 0;
   return canars;
 }
 
@@ -35,8 +36,11 @@ void AddCanar(Canars *canars, int x, int y, SDL_Renderer *render)
   newCanar->velocity = 1;
   newCanar->next = canars->head;
   canars->head = newCanar;
+  canars->numberOfCanar++;
 }
+
 void ResetCanars(Canars *canars){
+  ;
 }
 
 void MoveCanar(Canars *canars)
@@ -66,6 +70,7 @@ void MoveCanar(Canars *canars)
 
       SDL_DestroyTexture(tmp->texture);
       free(tmp);
+      canars->numberOfCanar--;
     }
     else
     {

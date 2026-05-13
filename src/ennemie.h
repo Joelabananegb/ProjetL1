@@ -21,6 +21,7 @@ typedef struct Canar
 typedef struct
 {
   Canar *head;
+  int numberOfCanar;
 } Canars;
 
 Canars *InitCanar();

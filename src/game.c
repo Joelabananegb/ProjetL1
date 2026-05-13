@@ -36,7 +36,7 @@ void RenderPlayer(Player *player, SDL_Renderer *render)
 void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, TTF_Font *font)
 {
   RenderPlayer(player, render);
-  RenderPlayerHeart(player, render);
+  RenderPlayerHeart(player, render, font);
   RenderScore(player, font, render);
   RenderProjectiles(flechettes,render);
   MoveFlechettes(flechettes);
@@ -70,11 +70,22 @@ bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
   return SDL_HasIntersection(firstRect, secondRect);
 }
 
-void RenderPlayerHeart(Player *player, SDL_Renderer *render)
+void RenderPlayerHeart(Player *player, SDL_Renderer *render, TTF_Font *font)
 {
+  char scor[64];
+  sprintf(scor, "Live: ");
+  SDL_Color color = {255, 255, 255, 255};
+  SDL_Surface *fontSurf = TTF_RenderText_Blended(font, scor, color);
+  SDL_Texture *fontTexture = SDL_CreateTextureFromSurface(render,fontSurf);
+  SDL_FreeSurface(fontSurf);
+
+  SDL_Rect fontRect = {10, 10, 0, 0};
+  SDL_QueryTexture(fontTexture, NULL, NULL, &fontRect.w, &fontRect.h);
+  SDL_RenderCopy(render, fontTexture, NULL, &fontRect);
+
   for (int i = 0; i < player->health; i+=25)
   {
-    player->heartDestRect = (SDL_Rect){i+10, 10, 16,16};
+    player->heartDestRect = (SDL_Rect){i+90, 15, 16,16};
     SDL_RenderCopy(render,player->heartTexture,&player->heartRect,&player->heartDestRect);
   }
 }
@@ -108,7 +119,7 @@ void RenderScore(Player *player, TTF_Font *font, SDL_Renderer *render)
   SDL_Texture *fontTexture = SDL_CreateTextureFromSurface(render,fontSurf);
   SDL_FreeSurface(fontSurf);
 
-  SDL_Rect fontRect = {50, 50, 0, 0};
+  SDL_Rect fontRect = {SCREEN_HEIGHT + 50, 10, 0, 0};
   SDL_QueryTexture(fontTexture, NULL, NULL, &fontRect.w, &fontRect.h);
   SDL_RenderCopy(render, fontTexture, NULL, &fontRect);
 }
@@ -166,6 +177,7 @@ void Collide(Flechettes *flechettes, Canars *canars, Player *player)
 
         SDL_DestroyTexture(currentCanar->texture);
         free(currentCanar);
+        canars->numberOfCanar--;
 
         // Supprimer la flechette
         if (prevFlechette == NULL)
@@ -222,6 +234,7 @@ void CollideWithPlayer(Player *player, Canars *canars)
       currentCanar = currentCanar->next;
       PlayerDamage(player);
       free(tmp);
+      canars->numberOfCanar--;
     }
     else
     {
@@ -239,7 +252,7 @@ void FreeAll(Player *player, Flechettes *flechettes, Canars *canars){
 
 void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, TTF_Font *font)
 {
-  printf("Score: %d | Health: %d | started %d\n",player->score,player->health, started);
+  printf("Score: %d | Health: %d | started %d | numberOfCanar %d\n",player->score,player->health, started, canars->numberOfCanar);
 
 
   SDL_Event event;

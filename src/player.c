@@ -14,7 +14,7 @@ Player *InitPlayer(SDL_Renderer *render, const char *imgpath, const char *imgpat
   player->score = 0;
   player->alive = true;
   player->heartTexture = IMG_LoadTexture(render, imgpathHearth);
-  player->hearthRect = (SDL_Rect){80,100,16,16};
+  player->heartRect = (SDL_Rect){80,100,16,16};
   player->heartDestRect = (SDL_Rect){10,10,64,64};
   return player;
 }

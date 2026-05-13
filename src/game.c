@@ -71,11 +71,11 @@ bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
 }
 
 void RenderPlayerHeart(Player *player, SDL_Renderer *render)
-0{
+{
   for (int i = 0; i < player->health; i+=25)
   {
     player->heartDestRect = (SDL_Rect){i+10, 10, 16,16};
-    SDL_RenderCopy(render,player->heartTexture,&player->hearthRect,&player->heartDestRect);
+    SDL_RenderCopy(render,player->heartTexture,&player->heartRect,&player->heartDestRect);
   }
 }
 
@@ -84,7 +84,7 @@ void LevelTwo(SDL_Renderer *render, Canars *canars)
   for (int i = 0; i < 2; i++)
   {
     for (int j = 0; j <= 12-i; j++)
-    0{
+    {
       AddCanar(canars, j*60 + i*30,62*i,render);
     }
   }
@@ -102,9 +102,9 @@ void LevelOne(SDL_Renderer *render, Canars *canars)
 void RenderScore(Player *player, TTF_Font *font, SDL_Renderer *render)
 {
   char scor[64];
-  sprintf(score, "Score: %d", player->score);
+  sprintf(scor, "Score: %d", player->score);
   SDL_Color color = {255, 255, 255, 255};
-  SDL_Surface *fontSurf = TTF_RenderText_Blended(font, score, color);
+  SDL_Surface *fontSurf = TTF_RenderText_Blended(font, scor, color);
   SDL_Texture *fontTexture = SDL_CreateTextureFromSurface(render,fontSurf);
   SDL_FreeSurface(fontSurf);
 
@@ -142,6 +142,7 @@ void Collide(Flechettes *flechettes, Canars *canars, Player *player)
         else
             prevCanar->next = currentCanar->next;
 
+        SDL_DestroyTexture(currentCanar->texture);
         free(currentCanar);
 
         // Supprimer la flechette
@@ -153,6 +154,7 @@ void Collide(Flechettes *flechettes, Canars *canars, Player *player)
         {
           prevFlechette->next = currentFlechette->next;
         }
+        SDL_DestroyTexture(currentFlechette->texture);
         free(currentFlechette);
         flechettes->ammo--;
         UpdateScore(player);
@@ -193,6 +195,7 @@ void CollideWithPlayer(Player *player, Canars *canars)
       {
         prevCanar->next = currentCanar->next;
       }
+      SDL_DestroyTexture(currentCanar->texture);
       Canar *tmp = currentCanar;
       currentCanar = currentCanar->next;
       PlayerDamage(player);
@@ -214,7 +217,7 @@ void FreeAll(Player *player, Flechettes *flechettes, Canars *canars){
 
 void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, TTF_Font *font)
 {
-  printf("Score: %d | Heatl: %d | started %d\n",player->score,player->health, started);
+  printf("Score: %d | Health: %d | started %d\n",player->score,player->health, started);
 
 
   SDL_Event event;

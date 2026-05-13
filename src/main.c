@@ -61,7 +61,7 @@ int main()
   TTF_Font *font = TTF_OpenFont("./assets/space_invaders.ttf",24);
   if (!font)
   {
-    SDL_Log("Erreur de chargement du fonts: %s", TTF_GetError());
+    SDL_Log("Erreur de chargement du font: %s", TTF_GetError());
     goto cleanup;
   }
 

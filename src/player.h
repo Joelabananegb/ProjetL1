@@ -19,16 +19,14 @@ typedef struct{
   SDL_Rect destRect;
   SDL_Texture *texture;
   SDL_Texture *heartTexture;
-  SDL_Rect hearthRect;
+  SDL_Rect heartRect;
   SDL_Rect heartDestRect;
 
   bool alive;
 } Player;
 
 Player *InitPlayer(SDL_Renderer *, const char *, const char *);
-void ResetPlayer(player);
-
-void ResetPlyer(Player *);
+void ResetPlayer(Player *player);
 void MoveLeft(Player *);
 void MoveRight(Player *);
 void MoveUp(Player *);

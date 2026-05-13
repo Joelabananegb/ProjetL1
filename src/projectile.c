@@ -61,6 +61,7 @@ void MoveFlechettes(Flechettes *flechettes)
       Flechette *tmp = current;
       current = current->next;
       flechettes->ammo--;
+      SDL_DestroyTexture(tmp->texture);
       free(tmp);
     }
     else

@@ -64,6 +64,7 @@ void MoveCanar(Canars *canars)
         current = current->next;
       }
 
+      SDL_DestroyTexture(tmp->texture);
       free(tmp);
     }
     else

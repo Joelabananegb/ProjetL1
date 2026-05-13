@@ -71,7 +71,7 @@ bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
 }
 
 void RenderPlayerHeart(Player *player, SDL_Renderer *render)
-{
+0{
   for (int i = 0; i < player->health; i+=25)
   {
     player->heartDestRect = (SDL_Rect){i+10, 10, 16,16};
@@ -84,7 +84,7 @@ void LevelTwo(SDL_Renderer *render, Canars *canars)
   for (int i = 0; i < 2; i++)
   {
     for (int j = 0; j <= 12-i; j++)
-    {
+    0{
       AddCanar(canars, j*60 + i*30,62*i,render);
     }
   }

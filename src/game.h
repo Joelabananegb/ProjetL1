@@ -36,4 +36,7 @@ void RenderPlayer(Player *, SDL_Renderer *);
 void RenderProjectiles(Flechettes *, SDL_Renderer *);
 void RenderEnnemies(Canars *, SDL_Renderer *);
 
+void SaveHighScore(int score);
+int LoadHighScore();
+
 #endif 

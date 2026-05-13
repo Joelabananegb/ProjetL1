@@ -120,6 +120,28 @@ void UpdateScore(Player *player){
   player->score += rand() % 10;
 }
 
+void SaveHighScore(int score) {
+    FILE *file = fopen("bestScore.txt", "w");
+    if (file) {
+        int encrypted = score ^ 0xDEADBEEF;
+        fprintf(file, "%08X\n", encrypted);
+        fclose(file);
+    }
+}
+
+int LoadHighScore() {
+    FILE *file = fopen("bestScore.txt", "r");
+    int score = 0;
+    if (file) {
+        unsigned int encrypted;
+        if (fscanf(file, "%X", &encrypted) == 1) {
+            score = encrypted ^ 0xDEADBEEF;
+        }
+        fclose(file);
+    }
+    return score;
+}
+
 void Collide(Flechettes *flechettes, Canars *canars, Player *player)
 {
   Flechette *currentFlechette = flechettes->head;

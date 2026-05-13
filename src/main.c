@@ -66,6 +66,7 @@ int main()
   }
 
   player = InitPlayer(render, "./assets/SpaceInvaders.png","./assets/SpaceInvaders_Icons.png");
+  player->highScore = LoadHighScore();
   flechettes = InitFlechettes();
   canars = InitCanar();
   LevelTwo(render, canars);
@@ -92,6 +93,10 @@ int main()
   }
 
 cleanup:
+  if (player && player->score > player->highScore) {
+    player->highScore = player->score;
+    SaveHighScore(player->highScore);
+  }
   FreeAll(player, flechettes, canars);
   SDL_DestroyTexture(background);
   SDL_DestroyRenderer(render);

@@ -98,6 +98,13 @@ void LevelOne(SDL_Renderer *render, Canars *canars)
   }
 }
 
+void RenderScore(Player *player, TTF_Font *font)
+{
+  char scor[64];
+  sprintf(score, "Score: %d", player->score);
+  SDL_Color color = {255, 255, 255, 255};
+  SDL_Surface *fontSurf = TTF_Render
+}
 void UpdateScore(Player *player){
   if (player->score >= player->highScore)
   {
@@ -198,7 +205,7 @@ void FreeAll(Player *player, Flechettes *flechettes, Canars *canars){
   FreeCanar(&canars);
 }
 
-void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars)
+void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, TTF_Font *font)
 {
   printf("Score: %d | Heatl: %d | started %d\n",player->score,player->health, started);
 
@@ -259,4 +266,3 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
   SDL_RenderPresent(render);
   SDL_Delay(16);
 }
-

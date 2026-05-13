@@ -13,7 +13,7 @@
 #define SCREEN_HEIGHT 600
 
 void HomeScreen(SDL_Renderer *, SDL_Texture *);
-void Game(SDL_Renderer *, Player *, Flechettes *, Canars *);
+void Game(SDL_Renderer *, Player *, Flechettes *, Canars *, TTF_Font *);
 void GameOver(SDL_Renderer *, const char *);
 
 void InitGame(SDL_Renderer *, Player *);

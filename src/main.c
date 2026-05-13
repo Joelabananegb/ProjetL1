@@ -50,10 +50,18 @@ int main()
     SDL_Log("Erreur renderer: %s", SDL_GetError());
     goto cleanup;
   }
+
   SDL_Texture *background = IMG_LoadTexture(render,"./assets/SpaceInvaders_Background.png");
   if (!background)
   {
     SDL_Log("Erreur background: %s", IMG_GetError());
+    goto cleanup;
+  }
+
+  TTF_Font *font = TTF_OpenFont("./assets/space_invaders.ttf",24);
+  if (!font)
+  {
+    SDL_Log("Erreur de chargement du fonts: %s", TTF_GetError());
     goto cleanup;
   }
 

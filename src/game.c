@@ -2,6 +2,61 @@
 
 bool started = true;
 
+void HomeScreen(SDL_Renderer *render, SDL_Texture *background)
+{
+  SDL_Rect destRect = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
+  SDL_RenderCopy(render, background, NULL, &destRect);
+}
+
+void RenderEnnemies(Canars *canars, SDL_Renderer *render)
+{ Canar *current = canars->head;
+
+  while (current != NULL)
+  {
+    SDL_RenderCopy(render, current->texture, &current->rect, &current->destRect);
+    current = current->next;
+  }
+}
+
+void RenderProjectiles(Flechettes *flechettes, SDL_Renderer *render)
+{
+  Flechette *current = flechettes->head;
+  while(current != NULL)
+  {
+    SDL_RenderCopy(render, current->texture, &current->rect, &current->destRect);
+    current = current->next;
+  }
+}
+
+void RenderPlayer(Player *player, SDL_Renderer *render)
+{
+  SDL_RenderCopy(render, player->texture, &player->rect,&player->destRect);
+}
+
+void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars)
+{
+  RenderPlayer(player, render);
+  RenderPlayerHeart(player, render);
+  RenderProjectiles(flechettes,render);
+  MoveFlechettes(flechettes);
+  RenderEnnemies(canars, render);
+  MoveCanar(canars);
+  Collide(flechettes,canars, player);
+  CollideWithPlayer(player, canars);
+}
+
+void ResetAll(Player *player, Canars *canars)
+{
+  ResetPlayer(player);
+  ResetCanars(canars);
+}
+void GameOver(SDL_Renderer *render, const char *path)
+{
+  SDL_Texture *gameOver = IMG_LoadTexture(render, path);
+  SDL_Rect rect = {0,0,SCREEN_WIDTH, SCREEN_HEIGHT};
+  SDL_RenderCopy(render, gameOver, NULL, &rect);
+}
+
 void Pause(SDL_Renderer *render,const char *path)
 {
   SDL_Texture *pauseScreen = IMG_LoadTexture(render,path);
@@ -23,22 +78,6 @@ void RenderPlayerHeart(Player *player, SDL_Renderer *render)
   }
 }
 
-void HomeScreen(SDL_Renderer *render, SDL_Texture *background)
-{
-  SDL_Rect destRect = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
-  SDL_RenderCopy(render, background, NULL, &destRect);
-}
-
-void RenderEnnemies(Canars *canars, SDL_Renderer *render)
-{ Canar *current = canars->head;
-
-  while (current != NULL)
-  {
-    SDL_RenderCopy(render, current->texture, &current->rect, &current->destRect);
-    current = current->next;
-  }
-}
-
 void LevelTwo(SDL_Renderer *render, Canars *canars)
 {
   for (int i = 0; i < 2; i++)
@@ -49,22 +88,13 @@ void LevelTwo(SDL_Renderer *render, Canars *canars)
     }
   }
 }
+
 void LevelOne(SDL_Renderer *render, Canars *canars)
 {
   for (int i = 0; i <= 12; i++)
   {
     AddCanar(canars, i*60,0, render);
     AddCanar(canars, i*60,40,render);
-  }
-}
-
-void RenderProjectiles(Flechettes *flechettes, SDL_Renderer *render)
-{
-  Flechette *current = flechettes->head;
-  while(current != NULL)
-  {
-    SDL_RenderCopy(render, current->texture, &current->rect, &current->destRect);
-    current = current->next;
   }
 }
 
@@ -161,24 +191,6 @@ void CollideWithPlayer(Player *player, Canars *canars)
     }
   }
 }
-
-void RenderPlayer(Player *player, SDL_Renderer *render)
-{
-  SDL_RenderCopy(render, player->texture, &player->rect,&player->destRect);
-}
-
-void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars)
-{
-  RenderPlayer(player, render);
-  RenderPlayerHeart(player, render);
-  RenderProjectiles(flechettes,render);
-  MoveFlechettes(flechettes);
-  RenderEnnemies(canars, render);
-  MoveCanar(canars);
-  Collide(flechettes,canars, player);
-  CollideWithPlayer(player, canars);
-}
-
 
 void FreeAll(Player *player, Flechettes *flechettes, Canars *canars){
   FreePlayer(&player);

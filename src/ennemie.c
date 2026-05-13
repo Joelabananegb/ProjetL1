@@ -15,7 +15,8 @@ void FreeCanar(Canars **canars)
   {
     Canar *tmp = current;
     current = current->next;
-    if (tmp->texture){
+    if (tmp->texture)
+    {
       SDL_DestroyTexture(tmp->texture);
     }
     free(tmp);
@@ -34,6 +35,8 @@ void AddCanar(Canars *canars, int x, int y, SDL_Renderer *render)
   newCanar->velocity = 1;
   newCanar->next = canars->head;
   canars->head = newCanar;
+}
+void ResetCanars(Canars *canars){
 }
 
 void MoveCanar(Canars *canars)

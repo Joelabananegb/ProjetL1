@@ -18,6 +18,13 @@ Player *InitPlayer(SDL_Renderer *render, const char *imgpath, const char *imgpat
   player->heartDestRect = (SDL_Rect){10,10,64,64};
   return player;
 }
+void  ResetPlayer(Player *player)
+{
+  player->destRect = (SDL_Rect){SCREEN_WIDTH/2 - 50, SCREEN_HEIGHT/2 + 180, 64, 64};
+  player->health = 100;
+  player->score = 0;
+  player->alive = true;
+}
 
 void MoveLeft(Player *player)
 {

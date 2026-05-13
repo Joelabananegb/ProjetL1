@@ -14,7 +14,7 @@
 
 void HomeScreen(SDL_Renderer *, SDL_Texture *);
 void Game(SDL_Renderer *, Player *, Flechettes *, Canars *);
-void GameOver(SDL_Renderer *);
+void GameOver(SDL_Renderer *, const char *);
 
 void InitGame(SDL_Renderer *, Player *);
 void FreeAll(Player *, Flechettes *, Canars *);

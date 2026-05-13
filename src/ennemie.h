@@ -24,6 +24,7 @@ typedef struct
 } Canars;
 
 Canars *InitCanar();
+void ResetCanars(Canars *canars);
 void FreeCanar(Canars **);
 void AddCanar(Canars *, int, int, SDL_Renderer *);
 void MoveCanar(Canars *);

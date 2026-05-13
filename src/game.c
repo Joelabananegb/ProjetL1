@@ -33,10 +33,11 @@ void RenderPlayer(Player *player, SDL_Renderer *render)
   SDL_RenderCopy(render, player->texture, &player->rect,&player->destRect);
 }
 
-void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars)
+void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, TTF_Font *font)
 {
   RenderPlayer(player, render);
   RenderPlayerHeart(player, render);
+  RenderScore(player, font, render);
   RenderProjectiles(flechettes,render);
   MoveFlechettes(flechettes);
   RenderEnnemies(canars, render);
@@ -98,12 +99,18 @@ void LevelOne(SDL_Renderer *render, Canars *canars)
   }
 }
 
-void RenderScore(Player *player, TTF_Font *font)
+void RenderScore(Player *player, TTF_Font *font, SDL_Renderer *render)
 {
   char scor[64];
   sprintf(score, "Score: %d", player->score);
   SDL_Color color = {255, 255, 255, 255};
-  SDL_Surface *fontSurf = TTF_Render
+  SDL_Surface *fontSurf = TTF_RenderText_Blended(font, score, color);
+  SDL_Texture *fontTexture = SDL_CreateTextureFromSurface(render,fontSurf);
+  SDL_FreeSurface(fontSurf);
+
+  SDL_Rect fontRect = {50, 50, 0, 0};
+  SDL_QueryTexture(fontTexture, NULL, NULL, &fontRect.w, &fontRect.h);
+  SDL_RenderCopy(render, fontTexture, NULL, &fontRect);
 }
 void UpdateScore(Player *player){
   if (player->score >= player->highScore)
@@ -217,7 +224,7 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
   
   if (started)
   {
-    RenderAll(render, player, flechettes, canars);
+    RenderAll(render, player, flechettes, canars, font);
       if(keystate[SDL_SCANCODE_RIGHT])
       {
         MoveRight(player);

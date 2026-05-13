@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_tff.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdlib.h>
 #include <time.h>
 #include "game.h" // Contient les déclarations liées au jeu (player, monster, etc.)
@@ -83,7 +83,7 @@ int main()
     }
     if (player->alive)
     {
-      Game(render, player, flechettes, canars);
+      Game(render, player, flechettes, canars, font);
     }
     else
     {

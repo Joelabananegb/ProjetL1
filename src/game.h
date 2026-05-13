@@ -30,7 +30,8 @@ void UpdateScore(Player *);
 
 void RenderPlayerHeart(Player *,SDL_Renderer *);
 void Pause(SDL_Renderer *, const char *);
-void RenderAll(SDL_Renderer *, Player *, Flechettes *, Canars *);
+void RenderAll(SDL_Renderer *, Player *, Flechettes *, Canars *, TTF_Font *);
+void RenderScore(Player *, TTF_Font *, SDL_Renderer *);
 void RenderPlayer(Player *, SDL_Renderer *);
 void RenderProjectiles(Flechettes *, SDL_Renderer *);
 void RenderEnnemies(Canars *, SDL_Renderer *);

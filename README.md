@@ -43,6 +43,7 @@ Améliorations possibles (bonus)
 * High score persistant
 * Effets visuels (explosions, particules)
 * Background animé
+* Système de particules personnalisé pour explosions dynamiques (gestion avancée des entités, calculs vectoriels, et rendu SDL pour démontrer des compétences en programmation orientée objet et optimisation)
 
 
 Technologies

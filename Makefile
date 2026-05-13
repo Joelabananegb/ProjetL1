@@ -1,6 +1,10 @@
 # Compilateur
 CC = gcc
 
+# Dossiers
+SRC_DIR = src
+OBJ_DIR = obj
+
 # Flags
 CFLAGS = -Wall -Wextra -g -fsanitize=address `sdl2-config --cflags` -lSDL2_image
 LDFLAGS = -lncurses -fsanitize=address `sdl2-config --libs` -lSDL2_image -lSDL2_ttf
@@ -10,25 +14,26 @@ ASAN = ASAN_OPTIONS=detect_leaks=0
 TARGET = Game
 
 # Fichiers sources
-SRC = ./src/main.c ./src/game.c ./src/player.c ./src/projectile.c ./src/ennemie.c
+SRC = $(SRC_DIR)/main.c $(SRC_DIR)/game.c $(SRC_DIR)/player.c $(SRC_DIR)/projectile.c $(SRC_DIR)/ennemie.c
 
 # Objets générés automatiquement
-OBJ = $(SRC:.c=.o)
+OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # Règle principale
 all: $(TARGET)
 
 # Link final
 $(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CC) $(OBJ) -o $@ $(LDFLAGS)
 
 # Compilation des .c en .o
-%.o: %.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Nettoyage
 clean:
-	rm -f *.o *~ $(TARGET)
+	rm -rf $(OBJ_DIR) $(TARGET)
 
 # Rebuild complet
 re: clean all

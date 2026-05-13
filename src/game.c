@@ -85,7 +85,7 @@ void RenderPlayerHeart(Player *player, SDL_Renderer *render, TTF_Font *font)
 
   for (int i = 0; i < player->health; i+=25)
   {
-    player->heartDestRect = (SDL_Rect){i+90, 15, 16,16};
+    player->heartDestRect = (SDL_Rect){i+90, 15, 22, 22};
     SDL_RenderCopy(render,player->heartTexture,&player->heartRect,&player->heartDestRect);
   }
 }

@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_tff.h>
 #include <stdlib.h>
 #include <time.h>
 #include "game.h" // Contient les déclarations liées au jeu (player, monster, etc.)
@@ -18,6 +19,13 @@ int main()
   if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
   {
     SDL_Log("Erreur IMG_Init: %s", IMG_GetError());
+    SDL_Quit();
+    return 1;
+  }
+
+  if (TTF_Init() == -1)
+  {
+    SDL_Log("Erreur TTF_init: %s", TTF_GetError());
     SDL_Quit();
     return 1;
   }

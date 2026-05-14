@@ -12,8 +12,7 @@ Roadmap / TODO
 
 Core Gameplay
 
-* Animation des sprites
-* Système de pause → Donne
+* Animation des sprites 
 * Quitter le jeu proprement
 * Écran de Game Over
 * Menu principal (Start Game)
@@ -25,8 +24,6 @@ Core Gameplay
 
 Player
 
-* Score (avec sauvegarde dans un fichier)
-* Système de vies
 * Respawn après mort
 * Mort du joueur → Game Over
 
@@ -40,7 +37,6 @@ Enemies
 Améliorations possibles (bonus)
 
 * Système de niveaux (difficulté progressive)
-* High score persistant
 * Effets visuels (explosions, particules)
 * Background animé
 * Système de particules personnalisé pour explosions dynamiques (gestion avancée des entités, calculs vectoriels, et rendu SDL pour démontrer des compétences en programmation orientée objet et optimisation)
@@ -51,17 +47,3 @@ Technologies
 * C
 * SDL2
 * SDL_image
-
-
-Objectif
-
-Créer une version moderne et propre de Space Invaders avec :
-
-* un gameplay fluide
-* une architecture claire
-* des mécaniques évolutives
-
-
-État du projet
-
-En cours de développement

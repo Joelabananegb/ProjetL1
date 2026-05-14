@@ -65,6 +65,9 @@ void FreePlayer(Player **player)
   if ((*player)->texture)
     SDL_DestroyTexture((*player)->texture);
 
+  if ((*player)->heartTexture)
+    SDL_DestroyTexture((*player)->heartTexture);
+
   free(*player);
   *player = NULL;
 }

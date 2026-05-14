@@ -70,6 +70,7 @@ void GameOver(SDL_Renderer *render, const char *path)
   SDL_Texture *gameOver = IMG_LoadTexture(render, path);
   SDL_Rect rect = {0,0,SCREEN_WIDTH, SCREEN_HEIGHT};
   SDL_RenderCopy(render, gameOver, NULL, &rect);
+  SDL_DestroyTexture(gameOver);
 }
 
 void Pause(SDL_Renderer *render,const char *path)
@@ -77,6 +78,7 @@ void Pause(SDL_Renderer *render,const char *path)
   SDL_Texture *pauseScreen = IMG_LoadTexture(render,path);
   SDL_Rect rect = {0,0,SCREEN_WIDTH, SCREEN_HEIGHT};
   SDL_RenderCopy(render, pauseScreen, NULL, &rect);
+  SDL_DestroyTexture(pauseScreen);
 }
 
 bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
@@ -136,6 +138,7 @@ void RenderScore(Player *player, TTF_Font *font, SDL_Renderer *render)
   SDL_Rect fontRect = {SCREEN_HEIGHT + 50, 10, 0, 0};
   SDL_QueryTexture(fontTexture, NULL, NULL, &fontRect.w, &fontRect.h);
   SDL_RenderCopy(render, fontTexture, NULL, &fontRect);
+  SDL_DestroyTexture(fontTexture);
 }
 
 /*void RenderHightScore(Player *player, TTF_Font *font, SDL_Renderer *render)

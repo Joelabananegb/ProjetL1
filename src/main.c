@@ -91,6 +91,11 @@ int main()
     }
     else
     {
+     // Afficher l'écran de Game Over avec les caractéristiques du joueur
+      GameOver(render, "./assets/paused.png");
+      SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
+      SDL_RenderPresent(render);
+      SDL_Delay(3000);  // Afficher pendant 3 secondes
       goto cleanup;
     }
     SDL_RenderPresent(render);

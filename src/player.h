@@ -1,5 +1,5 @@
-#ifndef CANON_H
-#define CANON_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include <stdlib.h>
 #include <stdbool.h>

@@ -24,8 +24,17 @@ typedef struct
   int numberOfCanar;
 } Canars;
 
+enum Moves 
+{
+  LEFT,
+  RIGTH,
+  BOTTOM
+};
+
+
 Canars *InitCanar();
-void ResetCanars(Canars *canars);
+void UpdateAll(Canars *);
+void ResetCanars(Canars *);
 void FreeCanar(Canars **);
 void AddCanar(Canars *, int, int, SDL_Renderer *);
 void MoveCanar(Canars *);

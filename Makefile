@@ -29,15 +29,15 @@ $(TARGET): $(OBJ)
 # Compilation des .c en .o
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@($(CC) $(CFLAGS) -c $< -o $@)
 
 # Nettoyage
 clean:
-	rm -rf $(OBJ_DIR) $(TARGET)
+	@(rm -rf $(OBJ_DIR) $(TARGET))
 
 # Rebuild complet
 re: clean all
 
 # Lancer le programme
 run: $(TARGET)
-	$(ASAN) ./$(TARGET)
+	@($(ASAN) ./$(TARGET))

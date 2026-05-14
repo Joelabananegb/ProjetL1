@@ -1,5 +1,7 @@
 #include "ennemie.h"
 
+#define elif else if
+
 Canars *InitCanar()
 {
   Canars *canars = malloc(sizeof(Canars));
@@ -43,6 +45,18 @@ void ResetCanars(Canars *canars){
   ;
 }
 
+
+enum Moves direction = RIGTH;
+
+void UpdateAll(Canars *canars)
+{
+  Canar *current = canars->head;
+  while(current!=NULL){
+    current->destRect.y += 10;
+    current = current->next;
+  }
+}
+
 void MoveCanar(Canars *canars)
 {
   Canar *current = canars->head;
@@ -50,7 +64,21 @@ void MoveCanar(Canars *canars)
 
   while (current != NULL)
   {
-    current->destRect.y += current->velocity;
+    printf("x = %d\n", current->destRect.x);
+    if (direction == RIGTH){
+      current->destRect.x += current->velocity;
+      if (current->destRect.x == 600){
+        UpdateAll(canars);
+        direction = LEFT;
+      }
+    }else{
+      current->destRect.x -= current->velocity;
+      if (current->destRect.x == 0)
+      {
+        UpdateAll(canars);
+        direction = RIGTH;
+      }
+    }
 
     // suppression si hors écran
     if (current->destRect.y >= 514)

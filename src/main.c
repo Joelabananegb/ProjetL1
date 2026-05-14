@@ -73,7 +73,7 @@ int main()
   canars = InitCanar(CanarTextureGen);
   LevelTwo(canars);
 
-  bool running = true;
+  static bool running = true;
   while (running)
   {
     SDL_RenderClear(render);

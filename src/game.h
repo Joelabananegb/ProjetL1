@@ -30,7 +30,7 @@ void CollideCanarPlayer(Player *, Canars *);
 void UpdateScore(Player *);
 
 void RenderPlayerHeart(Player *,SDL_Renderer *, TTF_Font *);
-void Pause(SDL_Renderer *, const char *);
+void Pause(SDL_Renderer *, const char *, TTF_Font *, Player *);
 void RenderAll(SDL_Renderer *, Player *, Flechettes *, Canars *, TTF_Font *);
 void RenderScore(Player *, TTF_Font *, SDL_Renderer *);
 void MoveElements(Flechettes *, Canars *);

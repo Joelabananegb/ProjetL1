@@ -69,12 +69,62 @@ void GameOver(SDL_Renderer *render, const char *path)
   SDL_DestroyTexture(gameOver);
 }
 
-void Pause(SDL_Renderer *render,const char *path)
+void Pause(SDL_Renderer *render,const char *path, TTF_Font *font, Player *player)
 {
   SDL_Texture *pauseScreen = IMG_LoadTexture(render,path);
   SDL_Rect rect = {0,0,SCREEN_WIDTH, SCREEN_HEIGHT};
-  SDL_RenderCopy(render, pauseScreen, NULL, &rect);
-  SDL_DestroyTexture(pauseScreen);
+
+  char scor[64];
+  char Hscor[64];
+  char pause[64];
+  char Epause[64];
+
+  sprintf(pause,"Pause");
+  sprintf(scor, "Score : %d", player->score);
+  sprintf(Hscor, "Best Score : %d", player->highScore);
+  sprintf(Epause, "Echape pour reprendre");
+
+  SDL_Color color = {255, 255, 255, 255};
+
+  SDL_Surface *fontSurf = TTF_RenderText_Blended(font, scor, color);
+  SDL_Surface *fontSurfH = TTF_RenderText_Blended(font, Hscor, color);
+  SDL_Surface *fontSurfP = TTF_RenderText_Blended(font, pause, color);
+  SDL_Surface *fontSurfPE = TTF_RenderText_Blended(font, Epause, color);
+
+  SDL_Texture *fontTexture = SDL_CreateTextureFromSurface(render,fontSurf);
+  SDL_Texture *fontTextureH = SDL_CreateTextureFromSurface(render,fontSurfH);
+  SDL_Texture *fontTextureP = SDL_CreateTextureFromSurface(render,fontSurfP);
+  SDL_Texture *fontTexturePE = SDL_CreateTextureFromSurface(render,fontSurfPE);
+
+  SDL_FreeSurface(fontSurf);
+  SDL_FreeSurface(fontSurfH);
+  SDL_FreeSurface(fontSurfP);
+  SDL_FreeSurface(fontSurfPE);
+
+  SDL_Rect fontRect = {(SCREEN_WIDTH/2) - 70, SCREEN_HEIGHT/2, 0, 0};
+  SDL_Rect fontRectH = {(SCREEN_WIDTH/2) - 70, SCREEN_HEIGHT/2 + 100, 0, 0};
+  SDL_Rect fontRectP = {0, 0, 0, 0};
+  SDL_Rect fontRectPE = {(SCREEN_WIDTH/2) - 70, SCREEN_HEIGHT/2 + 200, 0, 0};
+
+  SDL_QueryTexture(fontTexture, NULL, NULL, &fontRect.w, &fontRect.h);
+  SDL_QueryTexture(fontTextureH, NULL, NULL, &fontRectH.w, &fontRectH.h);
+  SDL_QueryTexture(fontTextureP, NULL, NULL, &fontRectP.w, &fontRectP.h);
+  SDL_QueryTexture(fontTexturePE, NULL, NULL, &fontRectPE.w, &fontRectPE.h);
+
+  fontRectP.w *= 2;
+  fontRectP.h *= 2;
+  fontRectP.x = (SCREEN_WIDTH - fontRectP.w) / 2;
+  fontRectP.y = 120;
+
+  SDL_RenderCopy(render, fontTexture, NULL, &fontRect);
+  SDL_RenderCopy(render, fontTextureH, NULL, &fontRectH);
+  SDL_RenderCopy(render, fontTextureP, NULL, &fontRectP);
+  SDL_RenderCopy(render, fontTexturePE, NULL, &fontRectPE);
+
+  SDL_DestroyTexture(fontTexture);
+  SDL_DestroyTexture(fontTextureH);
+  SDL_DestroyTexture(fontTextureP);
+  SDL_DestroyTexture(fontTexturePE);
 }
 
 bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
@@ -333,6 +383,6 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
     CollideElements(flechettes, canars, player);
     Input(keystate, player, flechettes);
   }else{
-    Pause(render,"./assets/paused.png");
+    Pause(render,"./assets/paused.png", font, player);
   }
 }

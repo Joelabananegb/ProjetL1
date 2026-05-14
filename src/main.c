@@ -79,12 +79,6 @@ int main()
     SDL_RenderClear(render);
     HomeScreen(render, background);
 
-    SDL_Event event;
-    while(SDL_PollEvent(&event))
-    {
-      if (event.type == SDL_QUIT)
-        running = false;
-    }
     if (player->alive)
     {
       Game(render, player, flechettes, canars, font);
@@ -99,7 +93,7 @@ int main()
       goto cleanup;
     }
     SDL_RenderPresent(render);
-    SDL_Delay(33);
+    SDL_Delay(32);
   }
 
 cleanup:

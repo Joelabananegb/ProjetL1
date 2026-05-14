@@ -1,8 +1,7 @@
 #include "game.h"
 
 bool started = true;
-Uint32 delay = 120;
-Uint32 move = 0;
+int spacePressed = 0;
 
 void HomeScreen(SDL_Renderer *render, SDL_Texture *background)
 {
@@ -34,12 +33,9 @@ void RenderPlayer(Player *player, SDL_Renderer *render)
 {
   SDL_RenderCopy(render, player->texture, &player->rect,&player->destRect);
 }
-void MoveElements(Flechettes *flechettes, Canars *canars, Uint32 nowMove)
+void MoveElements(Flechettes *flechettes, Canars *canars)
 {
-  if (nowMove - move >= delay){
-    move = nowMove;
-    MoveCanar(canars);
-  } 
+  MoveCanar(canars);
   MoveFlechettes(flechettes);
 
 }
@@ -270,20 +266,10 @@ void FreeAll(Player *player, Flechettes *flechettes, Canars *canars){
   FreeCanar(&canars);
 }
 
-void PutOnPause(Player *player, const Uint8 *keystate, SDL_Renderer *render)
-{
-  if (keystate[SDL_SCANCODE_ESCAPE] && started && player->alive)
-  {
-    started = false;
-  } else
-  {
-    started = true;
-  }
-}
 
 void Input(const Uint8 *keystate, Player *player, Flechettes *flechettes)
-{
-    if(keystate[SDL_SCANCODE_RIGHT])
+{ 
+  if(keystate[SDL_SCANCODE_RIGHT])
       {
         MoveRight(player);
       }
@@ -302,7 +288,6 @@ void Input(const Uint8 *keystate, Player *player, Flechettes *flechettes)
         MoveUp(player);
       }
       
-      static int spacePressed = 0;
 
       if (keystate[SDL_SCANCODE_SPACE])
       {
@@ -319,16 +304,31 @@ void Input(const Uint8 *keystate, Player *player, Flechettes *flechettes)
 }
 void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, TTF_Font *font)
 {
-  printf("Score: %d | Health: %d | started %d | numberOfCanar %d\n",player->score,player->health, started, canars->numberOfCanar);
+  printf("LOG -> |Score: %d | Health: %d | started: %d | numberOfCanar: %d | Space Pressed: %d\n",player->score,player->health, started, canars->numberOfCanar, spacePressed);
 
   SDL_Event event;
-  Uint32 nowMove = SDL_GetTicks();
-  SDL_PollEvent(&event);
+
+    while (SDL_PollEvent(&event))
+    {
+        if (event.type == SDL_QUIT)
+        {
+            player->alive = false;
+        }
+
+        if (event.type == SDL_KEYDOWN)
+        {
+            if (event.key.keysym.sym == SDLK_ESCAPE)
+            {
+                started = !started;
+            }
+        }
+    }
+
   const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-  PutOnPause(player, keystate, render);
+
   if (started)
   {
-    MoveElements(flechettes, canars, nowMove);
+    MoveElements(flechettes, canars);
     RenderAll(render, player, flechettes, canars, font);
     CollideElements(flechettes, canars, player);
     Input(keystate, player, flechettes);

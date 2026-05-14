@@ -22,20 +22,20 @@ typedef struct
 {
   Canar *head;
   int numberOfCanar;
+  SDL_Texture *textureGen;
 } Canars;
 
 enum Moves 
 {
-  LEFT,
-  RIGTH,
-  BOTTOM
+  LEFT = -1,
+  RIGTH = 1
 };
 
 
-Canars *InitCanar();
+Canars *InitCanar(SDL_Texture *);
 void UpdateAll(Canars *);
 void ResetCanars(Canars *);
 void FreeCanar(Canars **);
-void AddCanar(Canars *, int, int, SDL_Renderer *);
+void AddCanar(Canars *, int, int);
 void MoveCanar(Canars *);
 #endif 

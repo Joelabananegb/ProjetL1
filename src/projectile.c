@@ -1,9 +1,11 @@
 #include "projectile.h"
 
-Flechettes *InitFlechettes(){
+Flechettes *InitFlechettes(SDL_Texture *texture)
+{
   Flechettes *projectiles = malloc(sizeof(Flechettes));
   projectiles->head = NULL;
   projectiles->ammo = 0;
+  projectiles->textureGen = texture;
   return projectiles;
 }
 
@@ -14,24 +16,21 @@ void FreeFlechettes(Flechettes **flechettes)
   {
     Flechette *tmp = current;
     current = current->next;
-    if (tmp->texture){
-      SDL_DestroyTexture(tmp->texture);
-    }
     free(tmp);
   }
   free((*flechettes));
   (*flechettes) = NULL;
 }
 
-void AddFlechette(Flechettes *flechettes, int x, int y, SDL_Renderer *render)
+void AddFlechette(Flechettes *flechettes, int x, int y)
 {
   if (flechettes->ammo < MAX_AMMO)
   {
     Flechette *newFlechette = malloc(sizeof(Flechette));
     newFlechette->rect = (SDL_Rect){32, 0, 16, 16};
     newFlechette->destRect = (SDL_Rect){x,y,64,64};
-    newFlechette->texture = IMG_LoadTexture(render,"./assets/SpaceInvaders.png");
-    newFlechette->velocity = 5;
+    newFlechette->texture = flechettes->textureGen;
+    newFlechette->velocity = 2;
     newFlechette->next = flechettes->head;
     flechettes->head = newFlechette;
     flechettes->ammo++;
@@ -61,7 +60,6 @@ void MoveFlechettes(Flechettes *flechettes)
       Flechette *tmp = current;
       current = current->next;
       flechettes->ammo--;
-      SDL_DestroyTexture(tmp->texture);
       free(tmp);
     }
     else

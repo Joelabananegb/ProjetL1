@@ -1,6 +1,8 @@
 #include "game.h"
 
 bool started = true;
+Uint32 delay = 120;
+Uint32 move = 0;
 
 void HomeScreen(SDL_Renderer *render, SDL_Texture *background)
 {
@@ -9,8 +11,8 @@ void HomeScreen(SDL_Renderer *render, SDL_Texture *background)
 }
 
 void RenderEnnemies(Canars *canars, SDL_Renderer *render)
-{ Canar *current = canars->head;
-
+{ 
+  Canar *current = canars->head;
   while (current != NULL)
   {
     SDL_RenderCopy(render, current->texture, &current->rect, &current->destRect);
@@ -32,6 +34,21 @@ void RenderPlayer(Player *player, SDL_Renderer *render)
 {
   SDL_RenderCopy(render, player->texture, &player->rect,&player->destRect);
 }
+void MoveElements(Flechettes *flechettes, Canars *canars, Uint32 nowMove)
+{
+  if (nowMove - move >= delay){
+    move = nowMove;
+    MoveCanar(canars);
+  } 
+  MoveFlechettes(flechettes);
+
+}
+
+void CollideElements(Flechettes *flechettes, Canars *canars, Player *player)
+{
+  CollideCanarFlechette(flechettes,canars, player);
+  CollideCanarPlayer(player, canars);
+}
 
 void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, TTF_Font *font)
 {
@@ -39,11 +56,7 @@ void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Can
   RenderPlayerHeart(player, render, font);
   RenderScore(player, font, render);
   RenderProjectiles(flechettes,render);
-  MoveFlechettes(flechettes);
   RenderEnnemies(canars, render);
-  MoveCanar(canars);
-  Collide(flechettes,canars, player);
-  CollideWithPlayer(player, canars);
 }
 
 void ResetAll(Player *player, Canars *canars)
@@ -51,6 +64,7 @@ void ResetAll(Player *player, Canars *canars)
   ResetPlayer(player);
   ResetCanars(canars);
 }
+
 void GameOver(SDL_Renderer *render, const char *path)
 {
   SDL_Texture *gameOver = IMG_LoadTexture(render, path);
@@ -90,23 +104,23 @@ void RenderPlayerHeart(Player *player, SDL_Renderer *render, TTF_Font *font)
   }
 }
 
-void LevelTwo(SDL_Renderer *render, Canars *canars)
+void LevelTwo(Canars *canars)
 {
-  for (int i = 0; i < 2; i++)
+  for (int i = 1; i <= 3; i++)
   {
-    for (int j = 0; j <= 12-i; j++)
+    for (int j = 1; j <= 10-i; j++)
     {
-      AddCanar(canars, j*60 + i*30,62*i,render);
+      AddCanar(canars, j*60 + i*30,62*i);
     }
   }
 }
 
-void LevelOne(SDL_Renderer *render, Canars *canars)
+void LevelOne(Canars *canars)
 {
   for (int i = 0; i <= 12; i++)
   {
-    AddCanar(canars, i*60,0, render);
-    AddCanar(canars, i*60,40,render);
+    AddCanar(canars, i*60,0);
+    AddCanar(canars, i*60,40);
   }
 }
 
@@ -123,6 +137,12 @@ void RenderScore(Player *player, TTF_Font *font, SDL_Renderer *render)
   SDL_QueryTexture(fontTexture, NULL, NULL, &fontRect.w, &fontRect.h);
   SDL_RenderCopy(render, fontTexture, NULL, &fontRect);
 }
+
+/*void RenderHightScore(Player *player, TTF_Font *font, SDL_Renderer *render)
+{
+  ;
+}*/
+
 void UpdateScore(Player *player){
   if (player->score >= player->highScore)
   {
@@ -153,7 +173,7 @@ int LoadHighScore() {
     return score;
 }
 
-void Collide(Flechettes *flechettes, Canars *canars, Player *player)
+void CollideCanarFlechette(Flechettes *flechettes, Canars *canars, Player *player)
 {
   Flechette *currentFlechette = flechettes->head;
   Flechette *prevFlechette = NULL;
@@ -175,7 +195,6 @@ void Collide(Flechettes *flechettes, Canars *canars, Player *player)
         else
             prevCanar->next = currentCanar->next;
 
-        SDL_DestroyTexture(currentCanar->texture);
         free(currentCanar);
         canars->numberOfCanar--;
 
@@ -188,7 +207,6 @@ void Collide(Flechettes *flechettes, Canars *canars, Player *player)
         {
           prevFlechette->next = currentFlechette->next;
         }
-        SDL_DestroyTexture(currentFlechette->texture);
         free(currentFlechette);
         flechettes->ammo--;
         UpdateScore(player);
@@ -214,7 +232,7 @@ void Collide(Flechettes *flechettes, Canars *canars, Player *player)
 }
 
 
-void CollideWithPlayer(Player *player, Canars *canars)
+void CollideCanarPlayer(Player *player, Canars *canars)
 {
   Canar *currentCanar = canars->head;
   Canar *prevCanar = NULL;
@@ -229,7 +247,6 @@ void CollideWithPlayer(Player *player, Canars *canars)
       {
         prevCanar->next = currentCanar->next;
       }
-      SDL_DestroyTexture(currentCanar->texture);
       Canar *tmp = currentCanar;
       currentCanar = currentCanar->next;
       PlayerDamage(player);
@@ -250,25 +267,24 @@ void FreeAll(Player *player, Flechettes *flechettes, Canars *canars){
   FreeCanar(&canars);
 }
 
-void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, TTF_Font *font)
+void PutOnPause(Player *player, const Uint8 *keystate, SDL_Renderer *render)
 {
-  printf("Score: %d | Health: %d | started %d | numberOfCanar %d\n",player->score,player->health, started, canars->numberOfCanar);
-
-
-  SDL_Event event;
-  SDL_PollEvent(&event);
-
-  const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-  
-  if (started)
+  if (keystate[SDL_SCANCODE_ESCAPE] && started && player->alive)
   {
-    RenderAll(render, player, flechettes, canars, font);
-      if(keystate[SDL_SCANCODE_RIGHT])
+    started = false;
+  } else
+  {
+    started = true;
+  }
+}
+
+void Input(const Uint8 *keystate, Player *player, Flechettes *flechettes)
+{
+    if(keystate[SDL_SCANCODE_RIGHT])
       {
         MoveRight(player);
       }
-
-      if (keystate[SDL_SCANCODE_LEFT])
+    if (keystate[SDL_SCANCODE_LEFT])
       {
         MoveLeft(player);
       }
@@ -289,7 +305,7 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
       {
         if (!spacePressed)
         {
-          AddFlechette(flechettes, player->destRect.x + 4, player->destRect.y - 32, render);
+          AddFlechette(flechettes, player->destRect.x + 4, player->destRect.y - 32);
         }
         spacePressed = 1;
       }
@@ -297,17 +313,23 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
       {
         spacePressed = 0;
       }
+}
+void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, TTF_Font *font)
+{
+  printf("Score: %d | Health: %d | started %d | numberOfCanar %d\n",player->score,player->health, started, canars->numberOfCanar);
+
+  SDL_Event event;
+  Uint32 nowMove = SDL_GetTicks();
+  SDL_PollEvent(&event);
+  const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+  PutOnPause(player, keystate, render);
+  if (started)
+  {
+    MoveElements(flechettes, canars, nowMove);
+    RenderAll(render, player, flechettes, canars, font);
+    CollideElements(flechettes, canars, player);
+    Input(keystate, player, flechettes);
   }else{
     Pause(render,"./assets/paused.png");
   }
-
-  if (keystate[SDL_SCANCODE_ESCAPE] && started && player->alive)
-  {
-    started = false;
-  } else if (keystate[SDL_SCANCODE_Q] && !started && player->alive)
-  {
-    started = true;
-  }
-  SDL_RenderPresent(render);
-  SDL_Delay(16);
 }

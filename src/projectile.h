@@ -20,10 +20,11 @@ typedef struct
 {
   Flechette *head;
   int ammo;
+  SDL_Texture *textureGen;
 } Flechettes;
 
-Flechettes *InitFlechettes();
+Flechettes *InitFlechettes(SDL_Texture *);
 void FreeFlechettes(Flechettes **);
-void AddFlechette(Flechettes *, int, int, SDL_Renderer *);
+void AddFlechette(Flechettes *, int, int);
 void MoveFlechettes(Flechettes *);
 #endif

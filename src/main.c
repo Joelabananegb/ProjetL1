@@ -67,13 +67,16 @@ int main()
 
   player = InitPlayer(render, "./assets/SpaceInvaders.png","./assets/SpaceInvaders_Icons.png");
   player->highScore = LoadHighScore();
-  flechettes = InitFlechettes();
-  canars = InitCanar();
-  LevelTwo(render, canars);
+  SDL_Texture *FlechetteTextureGen = IMG_LoadTexture(render, "./assets/SpaceInvaders.png");
+  flechettes = InitFlechettes(FlechetteTextureGen);
+  SDL_Texture *CanarTextureGen = IMG_LoadTexture(render, "./assets/SpaceInvaders.png");
+  canars = InitCanar(CanarTextureGen);
+  LevelTwo(canars);
 
   bool running = true;
   while (running)
   {
+    SDL_RenderClear(render);
     HomeScreen(render, background);
 
     SDL_Event event;
@@ -90,6 +93,8 @@ int main()
     {
       goto cleanup;
     }
+    SDL_RenderPresent(render);
+    SDL_Delay(33);
   }
 
 cleanup:

@@ -22,7 +22,7 @@ void FreeFlechettes(Flechettes **flechettes)
   (*flechettes) = NULL;
 }
 
-void AddFlechette(Flechettes *flechettes, int x, int y)
+void AddFlechette(Flechettes *flechettes, int x, int y, int velo, bulletType type)
 {
   if (flechettes->ammo < MAX_AMMO)
   {
@@ -30,7 +30,8 @@ void AddFlechette(Flechettes *flechettes, int x, int y)
     newFlechette->rect = (SDL_Rect){32, 0, 16, 16};
     newFlechette->destRect = (SDL_Rect){x,y,64,64};
     newFlechette->texture = flechettes->textureGen;
-    newFlechette->velocity = 2;
+    newFlechette->velocity = velo;
+    newFlechette->type = type;
     newFlechette->next = flechettes->head;
     flechettes->head = newFlechette;
     flechettes->ammo++;
@@ -44,9 +45,9 @@ void MoveFlechettes(Flechettes *flechettes)
 
   while (current != NULL)
   {
-    current->destRect.y -= current->velocity; // monte vers le haut
+    current->destRect.y += current->velocity; // monte vers le haut
 
-    if (current->destRect.y <= 0)
+    if (current->destRect.y <= -64 || current->destRect.y >= 600)
     {
       if (prev == NULL)
       {

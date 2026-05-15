@@ -43,7 +43,6 @@ void ResetCanars(Canars *canars){
 }
 
 
-
 void UpdateAll(Canars *canars)
 {
   Canar *current = canars->head;
@@ -94,4 +93,32 @@ void MoveCanar(Canars *canars)
             current = current->next;
         }
     }
+}
+Canar *GetRandomCanar(Canars *canars)
+{
+    if (canars->head == NULL)
+        return NULL;
+
+    int target =
+        rand() % canars->numberOfCanar;
+
+    Canar *current = canars->head;
+
+    for (int i = 0; i < target; i++)
+    {
+        current = current->next;
+    }
+
+    return current;
+}
+
+void Attack(Canars *canars, Flechettes *flechettes)
+{
+    Canar *shooter =
+        GetRandomCanar(canars);
+
+    if (shooter == NULL)
+        return;
+
+    AddFlechette(flechettes, shooter->destRect.x + shooter->destRect.w / 2 - 8, shooter->destRect.y + shooter->destRect.h + 10, 8, ENEMYBULLET);
 }

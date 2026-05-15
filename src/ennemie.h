@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "projectile.h"
 
 typedef struct Canar
 {
@@ -38,4 +39,6 @@ void ResetCanars(Canars *);
 void FreeCanar(Canars **);
 void AddCanar(Canars *, int, int);
 void MoveCanar(Canars *);
+Canar *GetRandomCanar(Canars *);
+void Attack(Canars *, Flechettes *);
 #endif 

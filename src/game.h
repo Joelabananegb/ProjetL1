@@ -24,7 +24,7 @@ void LevelOne(Canars *);
 
 bool CheckCollision(SDL_Rect *, SDL_Rect *);
 bool CheckCollisionByMe(SDL_Rect *, SDL_Rect *);
-void CollideCanarFlechette(Flechettes *, Canars *, Player *);
+void CollideProjectile(Flechettes *, Canars *, Player *);
 void CollideCanarPlayer(Player *, Canars *);
 
 void UpdateScore(Player *);
@@ -43,5 +43,4 @@ void SaveHighScore(int score);
 int LoadHighScore();
 void RenderHightScore(Player *, TTF_Font *, SDL_Renderer *);
 void Input(const Uint8 *, Player *, Flechettes *);
-
 #endif 

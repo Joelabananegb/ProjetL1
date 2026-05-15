@@ -7,12 +7,18 @@
 
 #define MAX_AMMO 3
 
+typedef enum {
+  PLAYERBULLET,
+  ENEMYBULLET
+} bulletType;
+
 typedef struct Flechette
 {
   short velocity;
   SDL_Rect rect;
   SDL_Rect destRect;
   SDL_Texture *texture;
+  bulletType type;
   struct Flechette *next;
 } Flechette;
 
@@ -25,6 +31,6 @@ typedef struct
 
 Flechettes *InitFlechettes(SDL_Texture *);
 void FreeFlechettes(Flechettes **);
-void AddFlechette(Flechettes *, int, int);
+void AddFlechette(Flechettes *, int, int, int, bulletType);
 void MoveFlechettes(Flechettes *);
 #endif

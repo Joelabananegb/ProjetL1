@@ -78,20 +78,16 @@ int main()
   {
     SDL_RenderClear(render);
     HomeScreen(render, background);
+    Game(render, player, flechettes, canars, font);
 
-    if (player->alive)
-    {
-      Game(render, player, flechettes, canars, font);
-    }
-    else
-    {
-     // Afficher l'écran de Game Over avec les caractéristiques du joueur
+    if(!player->alive){
       GameOver(render, "./assets/paused.png");
       SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
       SDL_RenderPresent(render);
-      SDL_Delay(3000);  // Afficher pendant 3 secondes
+      //SDL_Delay(3000);  // Afficher pendant 3 secondes
       goto cleanup;
     }
+
     SDL_RenderPresent(render);
     SDL_Delay(32);
   }

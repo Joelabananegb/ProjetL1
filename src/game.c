@@ -42,7 +42,7 @@ void MoveElements(Flechettes *flechettes, Canars *canars)
 
 void CollideElements(Flechettes *flechettes, Canars *canars, Player *player)
 {
-  CollideCanarFlechette(flechettes,canars, player);
+  CollideProjectile(flechettes,canars, player);
   CollideCanarPlayer(player, canars);
 }
 
@@ -222,64 +222,92 @@ int LoadHighScore() {
     return score;
 }
 
-void CollideCanarFlechette(Flechettes *flechettes, Canars *canars, Player *player)
+void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player)
 {
-  Flechette *currentFlechette = flechettes->head;
-  Flechette *prevFlechette = NULL;
+    Flechette *currentFlechette = flechettes->head;
+    Flechette *prevFlechette = NULL;
 
-  while (currentFlechette != NULL)
-  {
-    Canar *currentCanar = canars->head;
-    Canar *prevCanar = NULL;
-
-    int hit = 0;
-
-    while (currentCanar != NULL)
+    while (currentFlechette != NULL)
     {
-      if (CheckCollision(&currentFlechette->destRect, &currentCanar->destRect))
-      {
-        // Supprimer le canard
-        if (prevCanar == NULL)
-            canars->head = currentCanar->next;
-        else
-            prevCanar->next = currentCanar->next;
+        int hit = 0;
 
-        free(currentCanar);
-        canars->numberOfCanar--;
-
-        // Supprimer la flechette
-        if (prevFlechette == NULL)
+        if (currentFlechette->type == PLAYERBULLET)
         {
-          flechettes->head = currentFlechette->next;
+            Canar *currentCanar = canars->head;
+            Canar *prevCanar = NULL;
+
+            while (currentCanar != NULL)
+            {
+                if (CheckCollision(&currentFlechette->destRect,&currentCanar->destRect))
+                {
+                    // supprimer canar
+                    if (prevCanar == NULL)
+                    {
+                        canars->head = currentCanar->next;
+                    }
+                    else
+                    {
+                        prevCanar->next = currentCanar->next;
+                    }
+                    free(currentCanar);
+                    canars->numberOfCanar--;
+
+                    // supprimer bullet
+                    if (prevFlechette == NULL)
+                    {
+                        flechettes->head = currentFlechette->next;
+                    }
+                    else
+                    {
+                        prevFlechette->next = currentFlechette->next;
+                    }
+                    free(currentFlechette);
+                    flechettes->ammo--;
+
+                    UpdateScore(player);
+
+                    hit = 1;
+                    break;
+                }
+
+                prevCanar = currentCanar;
+                currentCanar = currentCanar->next;
+            }
+        }
+
+        else if (currentFlechette->type == ENEMYBULLET)
+        {
+            if (CheckCollision(&currentFlechette->destRect, &player->destRect))
+            {
+                PlayerDamage(player);
+
+                // supprimer bullet
+                if (prevFlechette == NULL)
+                {
+                    flechettes->head = currentFlechette->next;
+                }
+                else
+                {
+                    prevFlechette->next = currentFlechette->next;
+                } 
+                free(currentFlechette);
+                flechettes->ammo--;
+
+                hit = 1;
+            }
+        }
+
+        if (!hit)
+        {
+            prevFlechette = currentFlechette;
+            currentFlechette = currentFlechette->next;
         }
         else
         {
-          prevFlechette->next = currentFlechette->next;
+            currentFlechette = (prevFlechette == NULL) ? flechettes->head : prevFlechette->next;
         }
-        free(currentFlechette);
-        flechettes->ammo--;
-        UpdateScore(player);
-        hit = 1;
-        break;
-      }
-
-      prevCanar = currentCanar;
-      currentCanar = currentCanar->next;
     }
-
-    if (hit)
-    {
-        // recommencer depuis le début des fléchettes
-        currentFlechette = (prevFlechette == NULL) ? flechettes->head : prevFlechette->next;
-    }
-    else
-    {
-        prevFlechette = currentFlechette;
-        currentFlechette = currentFlechette->next;
-    }
-  }
 }
-
 
 void CollideCanarPlayer(Player *player, Canars *canars)
 {
@@ -316,7 +344,6 @@ void FreeAll(Player *player, Flechettes *flechettes, Canars *canars){
   FreeCanar(&canars);
 }
 
-
 void Input(const Uint8 *keystate, Player *player, Flechettes *flechettes)
 { 
   if(keystate[SDL_SCANCODE_RIGHT])
@@ -343,7 +370,7 @@ void Input(const Uint8 *keystate, Player *player, Flechettes *flechettes)
       {
         if (!spacePressed)
         {
-          AddFlechette(flechettes, player->destRect.x + 4, player->destRect.y - 32);
+          AddFlechette(flechettes, player->destRect.x + 4, player->destRect.y - 32, -8, PLAYERBULLET);
         }
         spacePressed = 1;
       }
@@ -375,9 +402,15 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
     }
 
   const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+  static Uint32 nextEnemyShot = 0;
 
   if (started)
   {
+    if (SDL_GetTicks() >= nextEnemyShot)
+    {
+      Attack(canars, flechettes);
+      nextEnemyShot = SDL_GetTicks() + 500 + rand() % 1500;
+    }
     MoveElements(flechettes, canars);
     RenderAll(render, player, flechettes, canars, font);
     CollideElements(flechettes, canars, player);

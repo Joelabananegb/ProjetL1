@@ -145,7 +145,7 @@ void RenderPlayerHeart(Player *player, SDL_Renderer *render, TTF_Font *font)
   SDL_QueryTexture(fontTexture, NULL, NULL, &fontRect.w, &fontRect.h);
   SDL_RenderCopy(render, fontTexture, NULL, &fontRect);
 
-  for (int i = 0; i < player->health; i+=25)
+  for (int i = 0; i <= player->health; i+=25)
   {
     player->heartDestRect = (SDL_Rect){i+90, 15, 22, 22};
     SDL_RenderCopy(render,player->heartTexture,&player->heartRect,&player->heartDestRect);
@@ -414,7 +414,7 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
     if (SDL_GetTicks() >= nextEnemyShot)
     {
       Attack(canars, flechettes);
-      nextEnemyShot = SDL_GetTicks() + 500 + rand() % 1500;
+      nextEnemyShot = SDL_GetTicks() + 50 + rand() % 1500;
     }
 
     MoveElements(flechettes, canars, &nextMove, moveDelay);

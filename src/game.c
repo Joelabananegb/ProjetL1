@@ -33,9 +33,13 @@ void RenderPlayer(Player *player, SDL_Renderer *render)
 {
   SDL_RenderCopy(render, player->texture, &player->rect,&player->destRect);
 }
-void MoveElements(Flechettes *flechettes, Canars *canars)
+void MoveElements(Flechettes *flechettes, Canars *canars, Uint32 *nextMove, Uint32 moveDelay)
 {
-  MoveCanar(canars);
+  if (SDL_GetTicks() >= *nextMove)
+  {
+    MoveCanar(canars);
+    *nextMove = SDL_GetTicks() + moveDelay;
+  }
   MoveFlechettes(flechettes);
 
 }
@@ -58,7 +62,6 @@ void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Can
 void ResetAll(Player *player, Canars *canars)
 {
   ResetPlayer(player);
-  ResetCanars(canars);
 }
 
 void GameOver(SDL_Renderer *render, const char *path)
@@ -69,11 +72,8 @@ void GameOver(SDL_Renderer *render, const char *path)
   SDL_DestroyTexture(gameOver);
 }
 
-void Pause(SDL_Renderer *render,const char *path, TTF_Font *font, Player *player)
+void Pause(SDL_Renderer *render , TTF_Font *font, Player *player)
 {
-  SDL_Texture *pauseScreen = IMG_LoadTexture(render,path);
-  SDL_Rect rect = {0,0,SCREEN_WIDTH, SCREEN_HEIGHT};
-
   char scor[64];
   char Hscor[64];
   char pause[64];
@@ -187,12 +187,8 @@ void RenderScore(Player *player, TTF_Font *font, SDL_Renderer *render)
   SDL_DestroyTexture(fontTexture);
 }
 
-/*void RenderHightScore(Player *player, TTF_Font *font, SDL_Renderer *render)
+void UpdateScore(Player *player)
 {
-  ;
-}*/
-
-void UpdateScore(Player *player){
   if (player->score >= player->highScore)
   {
     player->highScore = player->score;
@@ -201,112 +197,113 @@ void UpdateScore(Player *player){
 }
 
 void SaveHighScore(int score) {
-    FILE *file = fopen("bestScore.txt", "w");
-    if (file) {
-        int encrypted = score ^ 0xDEADBEEF;
-        fprintf(file, "%08X\n", encrypted);
-        fclose(file);
-    }
+  FILE *file = fopen("bestScore.txt", "w");
+  if (file)
+  {
+    int encrypted = score ^ 0xDEADBEEF;
+    fprintf(file, "%08X\n", encrypted);
+    fclose(file);
+  }
 }
 
 int LoadHighScore() {
-    FILE *file = fopen("bestScore.txt", "r");
-    int score = 0;
-    if (file) {
-        unsigned int encrypted;
-        if (fscanf(file, "%X", &encrypted) == 1) {
-            score = encrypted ^ 0xDEADBEEF;
-        }
-        fclose(file);
+  FILE *file = fopen("bestScore.txt", "r");
+  int score = 0;
+  if (file)
+  {
+    unsigned int encrypted;
+    if (fscanf(file, "%X", &encrypted) == 1)
+    {
+      score = encrypted ^ 0xDEADBEEF;
     }
-    return score;
+    fclose(file);
+  }
+  return score;
 }
 
 void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player)
 {
-    Flechette *currentFlechette = flechettes->head;
-    Flechette *prevFlechette = NULL;
+  Flechette *currentFlechette = flechettes->head;
+  Flechette *prevFlechette = NULL;
 
-    while (currentFlechette != NULL)
+  while (currentFlechette != NULL)
+  {
+    int hit = 0;
+
+    if (currentFlechette->type == PLAYERBULLET)
     {
-        int hit = 0;
+      Canar *currentCanar = canars->head;
+      Canar *prevCanar = NULL;
 
-        if (currentFlechette->type == PLAYERBULLET)
+      while (currentCanar != NULL)
+      {
+        if (CheckCollision(&currentFlechette->destRect,&currentCanar->destRect))
         {
-            Canar *currentCanar = canars->head;
-            Canar *prevCanar = NULL;
+          // supprimer canar
+          if (prevCanar == NULL)
+          {
+            canars->head = currentCanar->next;
+          }
+          else
+          {
+            prevCanar->next = currentCanar->next;
+          }
+          free(currentCanar);
+          canars->numberOfCanar--;
 
-            while (currentCanar != NULL)
-            {
-                if (CheckCollision(&currentFlechette->destRect,&currentCanar->destRect))
-                {
-                    // supprimer canar
-                    if (prevCanar == NULL)
-                    {
-                        canars->head = currentCanar->next;
-                    }
-                    else
-                    {
-                        prevCanar->next = currentCanar->next;
-                    }
-                    free(currentCanar);
-                    canars->numberOfCanar--;
+          // supprimer bullet
+          if (prevFlechette == NULL)
+          {
+            flechettes->head = currentFlechette->next;
+          }
+          else
+          {
+            prevFlechette->next = currentFlechette->next;
+          }
+          free(currentFlechette);
+          flechettes->ammo--;
 
-                    // supprimer bullet
-                    if (prevFlechette == NULL)
-                    {
-                        flechettes->head = currentFlechette->next;
-                    }
-                    else
-                    {
-                        prevFlechette->next = currentFlechette->next;
-                    }
-                    free(currentFlechette);
-                    flechettes->ammo--;
+          UpdateScore(player);
 
-                    UpdateScore(player);
-
-                    hit = 1;
-                    break;
-                }
-
-                prevCanar = currentCanar;
-                currentCanar = currentCanar->next;
-            }
+          hit = 1;
+          break;
         }
 
-        else if (currentFlechette->type == ENEMYBULLET)
+        prevCanar = currentCanar;
+        currentCanar = currentCanar->next;
+      }
+    } else if (currentFlechette->type == ENEMYBULLET)
+    {
+      if (CheckCollision(&currentFlechette->destRect, &player->destRect))
+      {
+        PlayerDamage(player);
+
+        // supprimer bullet
+        if (prevFlechette == NULL)
         {
-            if (CheckCollision(&currentFlechette->destRect, &player->destRect))
-            {
-                PlayerDamage(player);
-
-                // supprimer bullet
-                if (prevFlechette == NULL)
-                {
-                    flechettes->head = currentFlechette->next;
-                }
-                else
-                {
-                    prevFlechette->next = currentFlechette->next;
-                } 
-                free(currentFlechette);
-                flechettes->ammo--;
-
-                hit = 1;
-            }
-        }
-
-        if (!hit)
-        {
-            prevFlechette = currentFlechette;
-            currentFlechette = currentFlechette->next;
+            flechettes->head = currentFlechette->next;
         }
         else
         {
-            currentFlechette = (prevFlechette == NULL) ? flechettes->head : prevFlechette->next;
-        }
+          prevFlechette->next = currentFlechette->next;
+        } 
+        free(currentFlechette);
+        flechettes->ammo--;
+
+        hit = 1;
+      }
     }
+
+    if (!hit)
+    {
+      prevFlechette = currentFlechette;
+      currentFlechette = currentFlechette->next;
+    }
+    else
+    {
+      currentFlechette = (prevFlechette == NULL) ? flechettes->head : prevFlechette->next;
+    }
+  }
 }
 
 void CollideCanarPlayer(Player *player, Canars *canars)
@@ -347,62 +344,70 @@ void FreeAll(Player *player, Flechettes *flechettes, Canars *canars){
 void Input(const Uint8 *keystate, Player *player, Flechettes *flechettes)
 { 
   if(keystate[SDL_SCANCODE_RIGHT])
-      {
-        MoveRight(player);
-      }
-    if (keystate[SDL_SCANCODE_LEFT])
-      {
-        MoveLeft(player);
-      }
+  {
+    MoveRight(player);
+  }
+  if (keystate[SDL_SCANCODE_LEFT])
+  {
+    MoveLeft(player);
+  }
 
-      if(keystate[SDL_SCANCODE_DOWN])
-      {
-        MoveDown(player);
-      }
+  if(keystate[SDL_SCANCODE_DOWN])
+  {
+    MoveDown(player);
+  }
 
-      if (keystate[SDL_SCANCODE_UP])
-      {
-        MoveUp(player);
-      }
-      
+  if (keystate[SDL_SCANCODE_UP])
+  {
+    MoveUp(player);
+  }
 
-      if (keystate[SDL_SCANCODE_SPACE])
-      {
-        if (!spacePressed)
-        {
-          AddFlechette(flechettes, player->destRect.x + 4, player->destRect.y - 32, -8, PLAYERBULLET);
-        }
-        spacePressed = 1;
-      }
-      else
-      {
-        spacePressed = 0;
-      }
+  if (keystate[SDL_SCANCODE_SPACE])
+  {
+    if (!spacePressed)
+    {
+      AddFlechette(flechettes, player->destRect.x + 4, player->destRect.y - 32, -8, PLAYERBULLET);
+    }
+    spacePressed = 1;
+  }
+  else
+  {
+      spacePressed = 0;
+  }
 }
+
 void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, TTF_Font *font)
 {
   printf("LOG -> |Score: %d | Health: %d | started: %d | numberOfCanar: %d | Space Pressed: %d\n",player->score,player->health, started, canars->numberOfCanar, spacePressed);
 
   SDL_Event event;
 
-    while (SDL_PollEvent(&event))
+  while (SDL_PollEvent(&event))
+  {
+    if (event.type == SDL_QUIT)
     {
-        if (event.type == SDL_QUIT)
-        {
-            player->alive = false;
-        }
-
-        if (event.type == SDL_KEYDOWN)
-        {
-            if (event.key.keysym.sym == SDLK_ESCAPE)
-            {
-                started = !started;
-            }
-        }
+      player->alive = false;
     }
+
+    if (event.type == SDL_KEYDOWN)
+    {
+      if (event.key.keysym.sym == SDLK_ESCAPE)
+      {
+        started = !started;
+      }
+    }
+  }
 
   const Uint8 *keystate = SDL_GetKeyboardState(NULL);
   static Uint32 nextEnemyShot = 0;
+  static Uint32 nextMove = 0;
+  Uint32 baseDelay = 400;
+  Uint32 minDelay = 80;
+
+  float ratio = (float)canars->numberOfCanar / 25;
+  ratio = ratio * ratio;
+
+  Uint32 moveDelay = minDelay + (baseDelay - minDelay ) * ratio;
 
   if (started)
   {
@@ -411,11 +416,14 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
       Attack(canars, flechettes);
       nextEnemyShot = SDL_GetTicks() + 500 + rand() % 1500;
     }
-    MoveElements(flechettes, canars);
+
+    MoveElements(flechettes, canars, &nextMove, moveDelay);
+
     RenderAll(render, player, flechettes, canars, font);
     CollideElements(flechettes, canars, player);
     Input(keystate, player, flechettes);
-  }else{
-    Pause(render,"./assets/paused.png", font, player);
+  }else
+  {
+    Pause(render,font, player);
   }
 }

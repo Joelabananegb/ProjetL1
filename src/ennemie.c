@@ -38,10 +38,6 @@ void AddCanar(Canars *canars, int x, int y)
   canars->numberOfCanar++;
 }
 
-void ResetCanars(Canars *canars){
-  ;
-}
-
 
 void UpdateAll(Canars *canars)
 {
@@ -54,71 +50,61 @@ void UpdateAll(Canars *canars)
 
 void MoveCanar(Canars *canars)
 {
-    Canar *current = canars->head;
+  Canar *current = canars->head;
 
-    // 1. Déplacement horizontal
-    while (current != NULL)
+  while (current != NULL)
+  {
+    current->destRect.x += current->velocity * direction;
+    current = current->next;
+  }
+
+  bool hitEdge = false;
+
+  current = canars->head;
+
+  while (current != NULL)
+  {
+    if (current->destRect.x <= 0 || current->destRect.x >= 700)
     {
-        current->destRect.x += current->velocity * direction;
-        current = current->next;
+      hitEdge = true;
+      break;
     }
+    current = current->next;
+  }
 
-    // 2. Vérifie bord
-    bool hitEdge = false;
-
+  if (hitEdge)
+  {
+    direction *= -1;
     current = canars->head;
-
     while (current != NULL)
     {
-        if (current->destRect.x <= 0 ||
-            current->destRect.x >= 700)
-        {
-            hitEdge = true;
-            break;
-        }
-
-        current = current->next;
+      current->destRect.y += 16;
+      current = current->next;
     }
-
-    // 3. Descente + inversion
-    if (hitEdge)
-    {
-        direction *= -1;
-
-        current = canars->head;
-
-        while (current != NULL)
-        {
-            current->destRect.y += 16;
-            current = current->next;
-        }
-    }
+  }
 }
+
 Canar *GetRandomCanar(Canars *canars)
 {
-    if (canars->head == NULL)
-        return NULL;
+  if (canars->head == NULL) return NULL;
 
-    int target =
-        rand() % canars->numberOfCanar;
+  int target = rand() % canars->numberOfCanar;
 
-    Canar *current = canars->head;
+  Canar *current = canars->head;
 
-    for (int i = 0; i < target; i++)
-    {
-        current = current->next;
-    }
+  for (int i = 0; i < target; i++)
+  {
+    current = current->next;
+  }
 
-    return current;
+  return current;
 }
 
 void Attack(Canars *canars, Flechettes *flechettes)
 {
-    Canar *shooter =
-        GetRandomCanar(canars);
+    Canar *shooter = GetRandomCanar(canars);
 
-    if (shooter == NULL)
-        return;
+    if (shooter == NULL) return;
 
     AddFlechette(flechettes, shooter->destRect.x + shooter->destRect.w / 2 - 8, shooter->destRect.y + shooter->destRect.h + 10, 8, ENEMYBULLET);
 }

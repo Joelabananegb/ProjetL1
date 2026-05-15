@@ -34,11 +34,10 @@ enum Moves
 
 
 Canars *InitCanar(SDL_Texture *);
+Canar *GetRandomCanar(Canars *);
 void UpdateAll(Canars *);
-void ResetCanars(Canars *);
 void FreeCanar(Canars **);
 void AddCanar(Canars *, int, int);
 void MoveCanar(Canars *);
-Canar *GetRandomCanar(Canars *);
 void Attack(Canars *, Flechettes *);
 #endif 

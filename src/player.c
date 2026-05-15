@@ -7,7 +7,7 @@ Player *InitPlayer(SDL_Renderer *render, const char *imgpath, const char *imgpat
   player->rect = (SDL_Rect){64, 0, 16, 16};
   player->destRect = (SDL_Rect){SCREEN_WIDTH/2 - 50, SCREEN_HEIGHT/2 + 180, 64, 64};
   player->texture = IMG_LoadTexture(render, imgpath);
-  player->velocity = 1;
+  player->velocity = 8;
   player->attack = 10;
   player->health = 100;
   player->maxHealth = 100;

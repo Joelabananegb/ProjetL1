@@ -89,7 +89,7 @@ int main()
     }
 
     SDL_RenderPresent(render);
-    SDL_Delay(32);
+    SDL_Delay(16);
   }
 
 cleanup:

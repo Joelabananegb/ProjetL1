@@ -30,10 +30,10 @@ void CollideCanarPlayer(Player *, Canars *);
 void UpdateScore(Player *);
 
 void RenderPlayerHeart(Player *,SDL_Renderer *, TTF_Font *);
-void Pause(SDL_Renderer *, const char *, TTF_Font *, Player *);
+void Pause(SDL_Renderer *, TTF_Font *, Player *);
 void RenderAll(SDL_Renderer *, Player *, Flechettes *, Canars *, TTF_Font *);
 void RenderScore(Player *, TTF_Font *, SDL_Renderer *);
-void MoveElements(Flechettes *, Canars *);
+void MoveElements(Flechettes *, Canars *, Uint32 *, Uint32);
 void CollideElements(Flechettes *, Canars *, Player *);
 void RenderPlayer(Player *, SDL_Renderer *);
 void RenderProjectiles(Flechettes *, SDL_Renderer *);
@@ -41,6 +41,5 @@ void RenderEnnemies(Canars *, SDL_Renderer *);
 
 void SaveHighScore(int score);
 int LoadHighScore();
-void RenderHightScore(Player *, TTF_Font *, SDL_Renderer *);
 void Input(const Uint8 *, Player *, Flechettes *);
 #endif 

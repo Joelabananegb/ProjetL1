@@ -14,6 +14,10 @@
 #define SCREEN_HEIGHT 600
 #define MAX_CHAR 64
 
+typedef struct game {
+  bool running;
+} Game;
+
 void GameBackground(SDL_Renderer *, SDL_Texture *);
 void Game(SDL_Renderer *, Player *, Flechettes *, Canars *, TTF_Font *);
 void GameOver(SDL_Renderer *, const char *);

@@ -1,6 +1,7 @@
 #include "game.h"
 
-bool started = true;
+bool started = false;
+bool paused = false;
 int spacePressed = 0;
 
 void HomeScreen(TTF_Font *font, SDL_Renderer *render)
@@ -416,7 +417,7 @@ void Input(const Uint8 *keystate, Player *player, Flechettes *flechettes)
 
 void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, TTF_Font *font)
 {
-  printf("LOG -> |Score: %d | Health: %d | started: %d | numberOfCanar: %d | Space Pressed: %d\n",player->score,player->health, started, canars->numberOfCanar, spacePressed);
+  printf("LOG -> |Score: %d | Health: %d | started: %d | numberOfCanar: %d | Space Pressed: %d | Paused: %d |\n",player->score,player->health, started, canars->numberOfCanar, spacePressed, paused);
 
   SDL_Event event;
 
@@ -431,8 +432,12 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
     {
       if (event.key.keysym.sym == SDLK_ESCAPE)
       {
-        started = !started;
+        paused = !paused;
       }
+
+      if (event.key.keysym.sym == SDLK_SPACE && started != true){
+        started = !started;
+      } 
     }
   }
 
@@ -447,7 +452,7 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
 
   Uint32 moveDelay = minDelay + (baseDelay - minDelay ) * ratio;
 
-  if (started)
+  if (started && !paused)
   {
     if (SDL_GetTicks() >= nextEnemyShot)
     {
@@ -460,8 +465,12 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
     RenderAll(render, player, flechettes, canars, font);
     CollideElements(flechettes, canars, player);
     Input(keystate, player, flechettes);
-  }else
+  } else if (!started)
   {
     HomeScreen(font, render);
+  }
+
+  if (started && paused){
+    Pause(render, font, player);
   }
 }

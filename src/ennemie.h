@@ -23,6 +23,7 @@ typedef struct
 {
   Canar *head;
   int numberOfCanar;
+  int numberInit;
   SDL_Texture *textureGen;
 } Canars;
 

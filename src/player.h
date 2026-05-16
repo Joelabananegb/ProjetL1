@@ -25,6 +25,8 @@ typedef struct{
   bool alive;
 } Player;
 
+
+int LoadHighScore();
 Player *InitPlayer(SDL_Renderer *, const char *, const char *);
 void ResetPlayer(Player *player);
 void MoveLeft(Player *);

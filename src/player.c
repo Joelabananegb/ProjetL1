@@ -1,5 +1,21 @@
 #include "player.h"
 
+int LoadHighScore() {
+  FILE *file = fopen("bestScore.txt", "r");
+  int score = 0;
+  if (file)
+  {
+    unsigned int encrypted;
+    if (fscanf(file, "%X", &encrypted) == 1)
+    {
+      score = encrypted ^ 0xDEADBEEF;
+    }
+    fclose(file);
+  }
+  return score;
+}
+
+
 Player *InitPlayer(SDL_Renderer *render, const char *imgpath, const char *imgpathHearth)
 {
   Player *player = malloc(sizeof(Player));
@@ -12,6 +28,7 @@ Player *InitPlayer(SDL_Renderer *render, const char *imgpath, const char *imgpat
   player->health = 100;
   player->maxHealth = 100;
   player->score = 0;
+  player->highScore = LoadHighScore();
   player->alive = true;
   player->heartTexture = IMG_LoadTexture(render, imgpathHearth);
   player->heartRect = (SDL_Rect){80,96,16,16};

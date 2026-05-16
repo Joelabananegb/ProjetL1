@@ -33,10 +33,10 @@ int main()
   Player *player = NULL;
   Flechettes *flechettes = NULL;
   Canars *canars = NULL;
+  Walls *walls = NULL;
+  GameState *gameState = NULL;
 
-  SDL_Window *window = SDL_CreateWindow("Space Shooter",
-    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-    SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+  SDL_Window *window = SDL_CreateWindow("Earth invader", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 
   if (!window)
   {
@@ -65,22 +65,23 @@ int main()
     goto cleanup;
   }
 
+  SDL_Texture *TextureGen = IMG_LoadTexture(render, "./assets/SpaceInvaders.png");
+  gameState = InitGameState();
   player = InitPlayer(render, "./assets/SpaceInvaders.png","./assets/SpaceInvaders_Icons.png");
-  player->highScore = LoadHighScore();
-  SDL_Texture *FlechetteTextureGen = IMG_LoadTexture(render, "./assets/SpaceInvaders.png");
-  flechettes = InitFlechettes(FlechetteTextureGen);
-  SDL_Texture *CanarTextureGen = IMG_LoadTexture(render, "./assets/SpaceInvaders.png");
-  canars = InitCanar(CanarTextureGen);
-  LevelTwo(canars);
+  flechettes = InitFlechettes(TextureGen);
+  canars = InitCanar(TextureGen);
+  walls = InitWalls(TextureGen);
+  CreateWalls(walls);
+  LevelOne(canars);
 
-  static bool running = true;
-  while (running)
+  while (gameState->running)
   {
     SDL_RenderClear(render);
     GameBackground(render, background);
-    Game(render, player, flechettes, canars, font);
+    Game(render, player, flechettes, canars, walls, font, gameState);
 
-    if(!player->alive){
+    if(!player->alive)
+    {
       GameOver(render, "./assets/paused.png");
       SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
       SDL_RenderPresent(render);

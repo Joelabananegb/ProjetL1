@@ -7,6 +7,7 @@ Canars *InitCanar(SDL_Texture *texture)
   Canars *canars = malloc(sizeof(Canars));
   canars->head = NULL;
   canars->numberOfCanar = 0;
+  canars->numberInit = 0;
   canars->textureGen = texture;
   return canars;
 }

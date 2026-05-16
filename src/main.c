@@ -77,7 +77,7 @@ int main()
   while (running)
   {
     SDL_RenderClear(render);
-    HomeScreen(render, background);
+    GameBackground(render, background);
     Game(render, player, flechettes, canars, font);
 
     if(!player->alive){

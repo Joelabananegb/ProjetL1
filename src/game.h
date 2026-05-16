@@ -12,12 +12,14 @@
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
+#define MAX_CHAR 64
 
-void HomeScreen(SDL_Renderer *, SDL_Texture *);
+void GameBackground(SDL_Renderer *, SDL_Texture *);
 void Game(SDL_Renderer *, Player *, Flechettes *, Canars *, TTF_Font *);
 void GameOver(SDL_Renderer *, const char *);
 
 void InitGame(SDL_Renderer *, Player *);
+void HomeScreen(TTF_Font *, SDL_Renderer *);
 void FreeAll(Player *, Flechettes *, Canars *);
 void LevelTwo(Canars *);
 void LevelOne(Canars *);

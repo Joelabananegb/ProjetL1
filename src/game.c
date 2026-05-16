@@ -3,7 +3,44 @@
 bool started = true;
 int spacePressed = 0;
 
-void HomeScreen(SDL_Renderer *render, SDL_Texture *background)
+void HomeScreen(TTF_Font *font, SDL_Renderer *render)
+{
+  char gameName[MAX_CHAR];
+  char How[MAX_CHAR];
+
+  sprintf(gameName, "Earth invader");
+  sprintf(How,"Press space to play");
+
+  SDL_Color color = {255, 255, 255, 255};
+
+  SDL_Surface *fontSurf = TTF_RenderText_Blended(font, gameName, color);
+  SDL_Surface *fontSurfH = TTF_RenderText_Blended(font, How, color);
+
+  SDL_Texture *fontTexture = SDL_CreateTextureFromSurface(render,fontSurf);
+  SDL_Texture *fontTextureH = SDL_CreateTextureFromSurface(render,fontSurfH);
+
+  SDL_FreeSurface(fontSurf);
+  SDL_FreeSurface(fontSurfH);
+
+  SDL_Rect fontRect = {0, 0, 0, 0};
+  SDL_Rect fontRectH = {(SCREEN_WIDTH / 2) - 150, SCREEN_HEIGHT / 2 + 100, 0, 0};
+
+  SDL_QueryTexture(fontTexture, NULL, NULL, &fontRect.w, &fontRect.h);
+  SDL_QueryTexture(fontTextureH, NULL, NULL, &fontRectH.w, &fontRectH.h);
+
+  fontRect.w *= 3;
+  fontRect.h *= 3;
+  fontRect.x = (SCREEN_WIDTH - fontRect.w ) / 2;
+  fontRect.y = 180;
+
+  SDL_RenderCopy(render, fontTexture, NULL, &fontRect);
+  SDL_RenderCopy(render, fontTextureH, NULL, &fontRectH);
+
+  SDL_DestroyTexture(fontTexture);
+  SDL_DestroyTexture(fontTextureH);
+}
+
+void GameBackground(SDL_Renderer *render, SDL_Texture *background)
 {
   SDL_Rect destRect = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
   SDL_RenderCopy(render, background, NULL, &destRect);
@@ -33,6 +70,7 @@ void RenderPlayer(Player *player, SDL_Renderer *render)
 {
   SDL_RenderCopy(render, player->texture, &player->rect,&player->destRect);
 }
+
 void MoveElements(Flechettes *flechettes, Canars *canars, Uint32 *nextMove, Uint32 moveDelay)
 {
   if (SDL_GetTicks() >= *nextMove)
@@ -74,10 +112,10 @@ void GameOver(SDL_Renderer *render, const char *path)
 
 void Pause(SDL_Renderer *render , TTF_Font *font, Player *player)
 {
-  char scor[64];
-  char Hscor[64];
-  char pause[64];
-  char Epause[64];
+  char scor[MAX_CHAR];
+  char Hscor[MAX_CHAR];
+  char pause[MAX_CHAR];
+  char Epause[MAX_CHAR];
 
   sprintf(pause,"Pause");
   sprintf(scor, "Score : %d", player->score);
@@ -101,10 +139,10 @@ void Pause(SDL_Renderer *render , TTF_Font *font, Player *player)
   SDL_FreeSurface(fontSurfP);
   SDL_FreeSurface(fontSurfPE);
 
-  SDL_Rect fontRect = {(SCREEN_WIDTH/2) - 70, SCREEN_HEIGHT/2, 0, 0};
-  SDL_Rect fontRectH = {(SCREEN_WIDTH/2) - 70, SCREEN_HEIGHT/2 + 100, 0, 0};
+  SDL_Rect fontRect = {(SCREEN_WIDTH/2) - 80, SCREEN_HEIGHT/2, 0, 0};
+  SDL_Rect fontRectH = {(SCREEN_WIDTH/2) - 80, SCREEN_HEIGHT/2 + 50, 0, 0};
   SDL_Rect fontRectP = {0, 0, 0, 0};
-  SDL_Rect fontRectPE = {(SCREEN_WIDTH/2) - 70, SCREEN_HEIGHT/2 + 200, 0, 0};
+  SDL_Rect fontRectPE = {(SCREEN_WIDTH/2) - 150, SCREEN_HEIGHT/2 + 120, 0, 0};
 
   SDL_QueryTexture(fontTexture, NULL, NULL, &fontRect.w, &fontRect.h);
   SDL_QueryTexture(fontTextureH, NULL, NULL, &fontRectH.w, &fontRectH.h);
@@ -114,7 +152,7 @@ void Pause(SDL_Renderer *render , TTF_Font *font, Player *player)
   fontRectP.w *= 2;
   fontRectP.h *= 2;
   fontRectP.x = (SCREEN_WIDTH - fontRectP.w) / 2;
-  fontRectP.y = 120;
+  fontRectP.y = 180;
 
   SDL_RenderCopy(render, fontTexture, NULL, &fontRect);
   SDL_RenderCopy(render, fontTextureH, NULL, &fontRectH);
@@ -134,7 +172,7 @@ bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
 
 void RenderPlayerHeart(Player *player, SDL_Renderer *render, TTF_Font *font)
 {
-  char scor[64];
+  char scor[MAX_CHAR];
   sprintf(scor, "Live: ");
   SDL_Color color = {255, 255, 255, 255};
   SDL_Surface *fontSurf = TTF_RenderText_Blended(font, scor, color);
@@ -174,7 +212,7 @@ void LevelOne(Canars *canars)
 
 void RenderScore(Player *player, TTF_Font *font, SDL_Renderer *render)
 {
-  char scor[64];
+  char scor[MAX_CHAR];
   sprintf(scor, "Score: %d", player->score);
   SDL_Color color = {255, 255, 255, 255};
   SDL_Surface *fontSurf = TTF_RenderText_Blended(font, scor, color);
@@ -424,6 +462,6 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
     Input(keystate, player, flechettes);
   }else
   {
-    Pause(render,font, player);
+    HomeScreen(font, render);
   }
 }

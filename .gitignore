@@ -3,3 +3,4 @@
 *.exe
 Game
 obj/*
+bestScore.txt

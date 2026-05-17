@@ -10,13 +10,11 @@ La boucle principale du jeu se trouve dans `MainLoop`. C’est notamment à cet 
 
 La boucle principale fonctionne tant que cette variable vaut `CONTINUE`, ce qui signifie que le jeu est toujours en cours.
 
----
 
 ### Q) 0.3
 
 La valeur `-1` correspond à une absence de pression.
 
----
 
 ### Q) 0.4
 
@@ -31,25 +29,21 @@ if ((canon->ypos < canon->pos_min) ||
 }
 ```
 
----
 
 ### Q) 0.5
 
 On utilise une chaîne vide, car le caractère vide n’est pas une chaîne vide. Ainsi, rien ne sera remplacé.
 
----
 
 ### Q) 0.6
 
 https://unicode.org/emoji/charts/full-emoji-list.html
 
----
 
 ### Q) 3.1
 
 On place `Interaction_Flechette_Canard()` dans le `main` afin de pouvoir accéder aux structures de la fléchette et du canard en même temps.
 
----
 
 # Partie B
 

@@ -125,17 +125,44 @@ void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Can
   RenderWalls(walls, render);
 }
 
-void ResetAll(Player *player, Canars *canars)
+void GameOver(SDL_Renderer *render, SDL_Texture *texture, TTF_Font *font, Player *player)
 {
-  ResetPlayer(player);
-}
+  GameBackground(render, texture);
 
-void GameOver(SDL_Renderer *render, const char *path)
-{
-  SDL_Texture *gameOver = IMG_LoadTexture(render, path);
-  SDL_Rect rect = {0,0,SCREEN_WIDTH, SCREEN_HEIGHT};
-  SDL_RenderCopy(render, gameOver, NULL, &rect);
-  SDL_DestroyTexture(gameOver);
+  char gameName[MAX_CHAR];
+  char How[MAX_CHAR];
+
+  sprintf(gameName, "Game Over");
+  sprintf(How,"highScore: %d", player->highScore);
+
+  SDL_Color color = {255, 255, 255, 255};
+
+  SDL_Surface *fontSurf = TTF_RenderText_Blended(font, gameName, color);
+  SDL_Surface *fontSurfH = TTF_RenderText_Blended(font, How, color);
+
+  SDL_Texture *fontTexture = SDL_CreateTextureFromSurface(render,fontSurf);
+  SDL_Texture *fontTextureH = SDL_CreateTextureFromSurface(render,fontSurfH);
+
+  SDL_FreeSurface(fontSurf);
+  SDL_FreeSurface(fontSurfH);
+
+  SDL_Rect fontRect = {0, 0, 0, 0};
+  SDL_Rect fontRectH = {(SCREEN_WIDTH / 2) - 150, SCREEN_HEIGHT / 2 + 100, 0, 0};
+
+  SDL_QueryTexture(fontTexture, NULL, NULL, &fontRect.w, &fontRect.h);
+  SDL_QueryTexture(fontTextureH, NULL, NULL, &fontRectH.w, &fontRectH.h);
+
+  fontRect.w *= 3;
+  fontRect.h *= 3;
+  fontRect.x = (SCREEN_WIDTH - fontRect.w ) / 2;
+  fontRect.y = 180;
+
+  SDL_RenderCopy(render, fontTexture, NULL, &fontRect);
+  SDL_RenderCopy(render, fontTextureH, NULL, &fontRectH);
+
+  SDL_DestroyTexture(fontTexture);
+  SDL_DestroyTexture(fontTextureH);
+
 }
 
 void Pause(SDL_Renderer *render , TTF_Font *font, Player *player)

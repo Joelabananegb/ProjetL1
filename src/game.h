@@ -25,7 +25,7 @@ typedef struct GameState {
 GameState *InitGameState();
 void GameBackground(SDL_Renderer *, SDL_Texture *);
 void Game(SDL_Renderer *, Player *, Flechettes *, Canars *, Walls *,TTF_Font *, GameState *);
-void GameOver(SDL_Renderer *, const char *);
+void GameOver(SDL_Renderer *, SDL_Texture *, TTF_Font *, Player *);
 
 void HomeScreen(TTF_Font *, SDL_Renderer *);
 void FreeAll(Player *, Flechettes *, Canars *);

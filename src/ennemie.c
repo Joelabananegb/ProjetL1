@@ -22,7 +22,6 @@ void FreeCanar(Canars **canars)
     current = current->next;
     free(tmp);
   }
-  
   free((*canars));
   (*canars) = NULL;
 }

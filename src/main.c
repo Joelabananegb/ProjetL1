@@ -80,9 +80,10 @@ int main()
 
     if(!player->alive)
     {
-      GameOver(render, "./assets/paused.png");
-      SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
+      SDL_RenderClear(render);
+      GameOver(render, background, font, player);
       SDL_RenderPresent(render);
+      SDL_Delay(2000);
       goto cleanup;
     }
 

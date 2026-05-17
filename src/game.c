@@ -1,4 +1,4 @@
-#include "game.h"
+#include "./header/game.h"
 
 int spacePressed = 0;
 

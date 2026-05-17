@@ -3,7 +3,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdlib.h>
 #include <time.h>
-#include "game.h" // Contient les éléments du jeu
+#include "./header/game.h" // Contient les éléments du jeu
 
 int main()
 {

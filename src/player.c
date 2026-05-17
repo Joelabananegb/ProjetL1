@@ -1,4 +1,4 @@
-#include "player.h"
+#include "./header/player.h"
 
 // Charge le meilleur score depuis le fichier
 int LoadHighScore() {

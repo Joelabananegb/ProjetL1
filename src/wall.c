@@ -1,4 +1,4 @@
-#include "wall.h"
+#include "./header/wall.h"
 
 // Initialise la liste des murs
 Walls *InitWalls(SDL_Texture *texture)

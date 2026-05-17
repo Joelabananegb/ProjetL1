@@ -1,4 +1,4 @@
-#include "projectile.h"
+#include "./header/projectile.h"
 
 // Initialise la liste des projectiles
 Flechettes *InitFlechettes(SDL_Texture *texture)

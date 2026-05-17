@@ -1,4 +1,4 @@
-#include "ennemie.h"
+#include "./header/ennemie.h"
 
 // Direction actuelle des ennemis
 enum Moves direction = RIGTH;

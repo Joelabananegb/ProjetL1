@@ -14,6 +14,7 @@ void CreatWall(Walls *walls, int x)
   newWall->rect = (SDL_Rect){50,20,27,16};
   newWall->destRect = (SDL_Rect){x * 90, (600 / 2) + 70, 80, 80};
   newWall->texture = walls->textureGen;
+  newWall->health = 3;
   newWall->next = walls->head;
   walls->head = newWall;
 }

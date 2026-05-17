@@ -108,9 +108,9 @@ void CreateWalls(Walls *walls)
   }
 }
 
-void CollideElements(Flechettes *flechettes, Canars *canars, Player *player)
+void CollideElements(Flechettes *flechettes, Canars *canars, Player *player, Walls *walls)
 {
-  CollideProjectile(flechettes,canars, player);
+  CollideProjectile(flechettes,canars, player, walls);
   CollideCanarPlayer(player, canars);
 }
 
@@ -274,7 +274,7 @@ void SaveHighScore(int score) {
 }
 
 
-void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player)
+void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, Walls *walls)
 {
   Flechette *currentFlechette = flechettes->head;
   Flechette *prevFlechette = NULL;
@@ -282,12 +282,57 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player)
   while (currentFlechette != NULL)
   {
     int hit = 0;
+    Wall *currentWall = walls->head;
+    Wall *prevWall = NULL;
 
-    if (currentFlechette->type == PLAYERBULLET)
+    while (currentWall != NULL)
+    {
+      if (CheckCollision(&currentFlechette->destRect, &currentWall->destRect))
+      {
+        currentWall->health--;
+
+        // destruction mur
+        if (currentWall->health <= 0)
+        {
+          if (prevWall == NULL)
+          {
+            walls->head = currentWall->next;
+          }
+          else
+          {
+            prevWall->next = currentWall->next;
+          }
+          Wall *tmpWall = currentWall;
+          currentWall = currentWall->next;
+
+          free(tmpWall);
+        }
+
+        if (prevFlechette == NULL)
+        {
+          flechettes->head = currentFlechette->next;
+        }
+        else
+        {
+          prevFlechette->next = currentFlechette->next;
+        }
+        Flechette *tmpBullet = currentFlechette;
+
+        currentFlechette = currentFlechette->next;
+        free(tmpBullet);
+        flechettes->ammo--;
+        hit = 1;
+        break;
+      }
+
+      prevWall = currentWall;
+      currentWall = currentWall->next;
+    }
+
+    if (!hit && currentFlechette->type == PLAYERBULLET)
     {
       Canar *currentCanar = canars->head;
       Canar *prevCanar = NULL;
-
       while (currentCanar != NULL)
       {
         if (CheckCollision(&currentFlechette->destRect, &currentCanar->destRect))
@@ -325,7 +370,7 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player)
         prevCanar = currentCanar;
         currentCanar = currentCanar->next;
       }
-    } else if (currentFlechette->type == ENEMYBULLET)
+    } else if (!hit && currentFlechette->type == ENEMYBULLET)
     {
       if (CheckCollision(&currentFlechette->destRect, &player->destRect))
       {
@@ -477,7 +522,7 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
     MoveElements(flechettes, canars, &nextMove, moveDelay);
 
     RenderAll(render, player, flechettes, canars, walls, font);
-    CollideElements(flechettes, canars, player);
+    CollideElements(flechettes, canars, player, walls);
     Input(keystate, player, flechettes);
   } else if (!gameState->started)
   {

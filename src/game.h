@@ -26,15 +26,16 @@ void GameBackground(SDL_Renderer *, SDL_Texture *);
 void Game(SDL_Renderer *, Player *, Flechettes *, Canars *, Walls *,TTF_Font *, GameState *);
 void GameOver(SDL_Renderer *, const char *);
 
-void InitGame(SDL_Renderer *, Player *);
 void HomeScreen(TTF_Font *, SDL_Renderer *);
 void FreeAll(Player *, Flechettes *, Canars *);
-void LevelTwo(Canars *);
+
 void LevelOne(Canars *);
+void LevelTwo(Canars *);
+void LevelThree(Canars *);
 
 bool CheckCollision(SDL_Rect *, SDL_Rect *);
 bool CheckCollisionByMe(SDL_Rect *, SDL_Rect *);
-void CollideProjectile(Flechettes *, Canars *, Player *);
+void CollideProjectile(Flechettes *, Canars *, Player *, Walls *wall);
 void CollideCanarPlayer(Player *, Canars *);
 
 void UpdateScore(Player *);
@@ -44,7 +45,7 @@ void Pause(SDL_Renderer *, TTF_Font *, Player *);
 void RenderAll(SDL_Renderer *, Player *, Flechettes *, Canars *, Walls *, TTF_Font *);
 void RenderScore(Player *, TTF_Font *, SDL_Renderer *);
 void MoveElements(Flechettes *, Canars *, Uint32 *, Uint32);
-void CollideElements(Flechettes *, Canars *, Player *);
+void CollideElements(Flechettes *, Canars *, Player *, Walls *);
 void CreateWalls(Walls *);
 void RenderPlayer(Player *, SDL_Renderer *);
 void RenderProjectiles(Flechettes *, SDL_Renderer *);

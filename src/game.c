@@ -8,6 +8,7 @@ GameState *InitGameState()
   game->running = true;
   game->started = false;
   game->paused = false;
+  game->currentLevel = 1;
   return game;
 }
 
@@ -217,6 +218,18 @@ void RenderPlayerHeart(Player *player, SDL_Renderer *render, TTF_Font *font)
   }
 }
 
+
+
+void LevelOne(Canars *canars)
+{
+  canars->numberInit = 8;
+  for (int i = 1; i <= canars->numberInit; i++)
+  {
+    AddCanar(canars, i*60,40);
+    AddCanar(canars, i*60,80);
+  }
+}
+
 void LevelTwo(Canars *canars)
 {
   canars->numberInit = 10;
@@ -229,13 +242,18 @@ void LevelTwo(Canars *canars)
   }
 }
 
-void LevelOne(Canars *canars)
+void LoadLevel(Canars *canars, int lvl)
 {
-  canars->numberInit = 8;
-  for (int i = 1; i <= canars->numberInit; i++)
+  switch (lvl)
   {
-    AddCanar(canars, i*60,40);
-    AddCanar(canars, i*60,80);
+    case 1:
+      LevelOne(canars);
+      break;
+    case 2:
+      LevelTwo(canars);
+      break;
+    default:
+        LevelOne(canars);
   }
 }
 
@@ -281,7 +299,7 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
 
   while (currentFlechette != NULL)
   {
-    int hit = 0;
+    bool hit = false;
     Wall *currentWall = walls->head;
     Wall *prevWall = NULL;
 
@@ -290,6 +308,7 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
       if (CheckCollision(&currentFlechette->destRect, &currentWall->destRect))
       {
         currentWall->health--;
+        currentWall->rect.y = (5 - currentWall->health) * 16;
 
         // destruction mur
         if (currentWall->health <= 0)
@@ -321,7 +340,7 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
         currentFlechette = currentFlechette->next;
         free(tmpBullet);
         flechettes->ammo--;
-        hit = 1;
+        hit = true;
         break;
       }
 
@@ -363,7 +382,7 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
 
           UpdateScore(player);
 
-          hit = 1;
+          hit = true;
           break;
         }
 
@@ -388,7 +407,7 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
         free(currentFlechette);
         flechettes->ammo--;
 
-        hit = 1;
+        hit = true;
       }
     }
 
@@ -520,10 +539,15 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
     }
 
     MoveElements(flechettes, canars, &nextMove, moveDelay);
-
     RenderAll(render, player, flechettes, canars, walls, font);
     CollideElements(flechettes, canars, player, walls);
     Input(keystate, player, flechettes);
+    if (canars->numberOfCanar <= 0)
+    {
+      ResetWalls(walls);
+      LoadLevel(canars, gameState->currentLevel++);
+      CreateWalls(walls);
+    }
   } else if (!gameState->started)
   {
     HomeScreen(font, render);

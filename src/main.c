@@ -71,8 +71,6 @@ int main()
   flechettes = InitFlechettes(TextureGen);
   canars = InitCanar(TextureGen);
   walls = InitWalls(TextureGen);
-  CreateWalls(walls);
-  LevelOne(canars);
 
   while (gameState->running)
   {

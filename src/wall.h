@@ -20,5 +20,5 @@ typedef struct walls {
 
 Walls *InitWalls(SDL_Texture *);
 void CreatWall(Walls *, int);
-void ChangeWall(Walls *);
+void ResetWalls(Walls *);
 #endif

@@ -19,6 +19,7 @@ typedef struct GameState {
   bool running;
   bool started;
   bool paused;
+  int currentLevel;
 } GameState;
 
 GameState *InitGameState();
@@ -29,6 +30,7 @@ void GameOver(SDL_Renderer *, const char *);
 void HomeScreen(TTF_Font *, SDL_Renderer *);
 void FreeAll(Player *, Flechettes *, Canars *);
 
+void LoadLevel(Canars *Canars, int);
 void LevelOne(Canars *);
 void LevelTwo(Canars *);
 void LevelThree(Canars *);

@@ -1,7 +1,9 @@
 #include "ennemie.h"
 
+// Direction actuelle des ennemis
 enum Moves direction = RIGTH;
 
+// Initialise la structure des canards
 Canars *InitCanar(SDL_Texture *texture)
 {
   Canars *canars = malloc(sizeof(Canars));
@@ -12,6 +14,7 @@ Canars *InitCanar(SDL_Texture *texture)
   return canars;
 }
 
+// Libère tous les canards
 void FreeCanar(Canars **canars)
 {
   Canar *current = (*canars)->head;
@@ -22,32 +25,44 @@ void FreeCanar(Canars **canars)
     current = current->next;
     free(tmp);
   }
+
   free((*canars));
   (*canars) = NULL;
 }
 
+// Ajoute un canard à la liste
 void AddCanar(Canars *canars, int x, int y)
 {
   Canar *newCanar = malloc(sizeof(Canar));
+
+  // Sprite source
   newCanar->rect = (SDL_Rect){0,0, 16, 16};
+
+  // Position et taille à l'écran
   newCanar->destRect = (SDL_Rect){x,y,64,64};
+
   newCanar->texture = canars->textureGen;
   newCanar->velocity = 16;
+
+  // Ajout en tête de liste
   newCanar->next = canars->head;
   canars->head = newCanar;
+
   canars->numberOfCanar++;
 }
 
-
+// Déplace tous les canards vers le bas
 void UpdateAll(Canars *canars)
 {
   Canar *current = canars->head;
+
   while(current!=NULL){
     current->destRect.y += 10;
     current = current->next;
   }
 }
 
+// Déplacement horizontal des canards
 void MoveCanar(Canars *canars)
 {
   Canar *current = canars->head;
@@ -62,6 +77,7 @@ void MoveCanar(Canars *canars)
 
   current = canars->head;
 
+  // Vérifie si un bord est touché
   while (current != NULL)
   {
     if (current->destRect.x <= 0 || current->destRect.x >= 700)
@@ -69,13 +85,17 @@ void MoveCanar(Canars *canars)
       hitEdge = true;
       break;
     }
+
     current = current->next;
   }
 
+  // Change de direction et descend
   if (hitEdge)
   {
     direction *= -1;
+
     current = canars->head;
+
     while (current != NULL)
     {
       current->destRect.y += 16;
@@ -84,6 +104,7 @@ void MoveCanar(Canars *canars)
   }
 }
 
+// Retourne un canard aléatoire
 Canar *GetRandomCanar(Canars *canars)
 {
   if (canars->head == NULL) return NULL;
@@ -100,6 +121,7 @@ Canar *GetRandomCanar(Canars *canars)
   return current;
 }
 
+// Fait tirer un canard aléatoire
 void Attack(Canars *canars, Flechettes *flechettes)
 {
     Canar *shooter = GetRandomCanar(canars);

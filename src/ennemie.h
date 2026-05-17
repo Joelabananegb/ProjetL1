@@ -9,36 +9,51 @@
 #include <string.h>
 #include "projectile.h"
 
+// Structure d'un ennemi
 typedef struct Canar
 {
-  SDL_Rect rect;
-  SDL_Rect destRect;
-  SDL_Texture *texture;
+  SDL_Rect rect;         // Sprite source
+  SDL_Rect destRect;     // Position et taille à l'écran
+  SDL_Texture *texture;  // Texture du canard
 
-  short velocity;
-  struct Canar *next;
+  short velocity;        // Vitesse de déplacement
+  struct Canar *next;    // Canard suivant
 } Canar;
 
+// Liste chaînée des ennemis
 typedef struct
 {
-  Canar *head;
-  int numberOfCanar;
-  int numberInit;
-  SDL_Texture *textureGen;
+  Canar *head;           // Premier canard
+  int numberOfCanar;     // Nombre total de canards
+  int numberInit;        // Nombre initial
+  SDL_Texture *textureGen; // Texture partagée
 } Canars;
 
+// Directions possibles
 enum Moves 
 {
   LEFT = -1,
   RIGTH = 1
 };
 
-
+// Initialise la liste des canards
 Canars *InitCanar(SDL_Texture *);
+
+// Retourne un canard aléatoire
 Canar *GetRandomCanar(Canars *);
+
+// Met à jour les canards
 void UpdateAll(Canars *);
+
+// Libère la mémoire
 void FreeCanar(Canars **);
+
+// Ajoute un canard
 void AddCanar(Canars *, int, int);
+
+// Déplace les canards
 void MoveCanar(Canars *);
+
+// Fait tirer un canard
 void Attack(Canars *, Flechettes *);
-#endif 
+#endif

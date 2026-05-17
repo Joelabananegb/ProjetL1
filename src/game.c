@@ -2,16 +2,20 @@
 
 int spacePressed = 0;
 
+// Initialise l'état du jeu
 GameState *InitGameState()
 {
   GameState *game = malloc(sizeof(GameState));
+
   game->running = true;
   game->started = false;
   game->paused = false;
   game->currentLevel = 1;
+
   return game;
 }
 
+// Écran d'accueil
 void HomeScreen(TTF_Font *font, SDL_Renderer *render)
 {
   char gameName[MAX_CHAR];
@@ -49,15 +53,18 @@ void HomeScreen(TTF_Font *font, SDL_Renderer *render)
   SDL_DestroyTexture(fontTextureH);
 }
 
+// Affiche le fond
 void GameBackground(SDL_Renderer *render, SDL_Texture *background)
 {
   SDL_Rect destRect = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
   SDL_RenderCopy(render, background, NULL, &destRect);
 }
 
+// Affiche les ennemis
 void RenderEnnemies(Canars *canars, SDL_Renderer *render)
 { 
   Canar *current = canars->head;
+
   while (current != NULL)
   {
     SDL_RenderCopy(render, current->texture, &current->rect, &current->destRect);
@@ -65,9 +72,11 @@ void RenderEnnemies(Canars *canars, SDL_Renderer *render)
   }
 }
 
+// Affiche les projectiles
 void RenderProjectiles(Flechettes *flechettes, SDL_Renderer *render)
 {
   Flechette *current = flechettes->head;
+
   while(current != NULL)
   {
     SDL_RenderCopy(render, current->texture, &current->rect, &current->destRect);
@@ -75,14 +84,17 @@ void RenderProjectiles(Flechettes *flechettes, SDL_Renderer *render)
   }
 }
 
+// Affiche le joueur
 void RenderPlayer(Player *player, SDL_Renderer *render)
 {
   SDL_RenderCopy(render, player->texture, &player->rect, &player->destRect);
 }
 
+// Affiche les murs
 void RenderWalls(Walls *walls, SDL_Renderer *render)
 {
   Wall *current = walls->head;
+
   while(current != NULL)
   {
     SDL_RenderCopy(render, current->texture, &current->rect, &current->destRect);
@@ -90,6 +102,7 @@ void RenderWalls(Walls *walls, SDL_Renderer *render)
   }
 }
 
+// Déplace les entités
 void MoveElements(Flechettes *flechettes, Canars *canars, Uint32 *nextMove, Uint32 moveDelay)
 {
   if (SDL_GetTicks() >= *nextMove)
@@ -97,10 +110,11 @@ void MoveElements(Flechettes *flechettes, Canars *canars, Uint32 *nextMove, Uint
     MoveCanar(canars);
     *nextMove = SDL_GetTicks() + moveDelay;
   }
-  MoveFlechettes(flechettes);
 
+  MoveFlechettes(flechettes);
 }
 
+// Création des murs
 void CreateWalls(Walls *walls)
 {
   for (int i = 0; i <= 7; i++)
@@ -109,12 +123,14 @@ void CreateWalls(Walls *walls)
   }
 }
 
+// Gestion des collisions globales
 void CollideElements(Flechettes *flechettes, Canars *canars, Player *player, Walls *walls)
 {
   CollideProjectile(flechettes,canars, player, walls);
   CollideCanarPlayer(player, canars);
 }
 
+// Rendu global
 void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, Walls *walls,TTF_Font *font)
 {
   RenderPlayer(player, render);
@@ -125,6 +141,7 @@ void RenderAll(SDL_Renderer *render, Player *player, Flechettes *flechettes, Can
   RenderWalls(walls, render);
 }
 
+// Écran Game Over
 void GameOver(SDL_Renderer *render, SDL_Texture *texture, TTF_Font *font, Player *player)
 {
   GameBackground(render, texture);
@@ -162,9 +179,9 @@ void GameOver(SDL_Renderer *render, SDL_Texture *texture, TTF_Font *font, Player
 
   SDL_DestroyTexture(fontTexture);
   SDL_DestroyTexture(fontTextureH);
-
 }
 
+// Pause
 void Pause(SDL_Renderer *render , TTF_Font *font, Player *player)
 {
   char scor[MAX_CHAR];
@@ -220,16 +237,20 @@ void Pause(SDL_Renderer *render , TTF_Font *font, Player *player)
   SDL_DestroyTexture(fontTexturePE);
 }
 
+// Collision simple AABB
 bool CheckCollision(SDL_Rect *firstRect, SDL_Rect *secondRect)
 {
   return SDL_HasIntersection(firstRect, secondRect);
 }
 
+// Affiche les vies
 void RenderPlayerHeart(Player *player, SDL_Renderer *render, TTF_Font *font)
 {
   char scor[MAX_CHAR];
   sprintf(scor, "Live: ");
+
   SDL_Color color = {255, 255, 255, 255};
+
   SDL_Surface *fontSurf = TTF_RenderText_Blended(font, scor, color);
   SDL_Texture *fontTexture = SDL_CreateTextureFromSurface(render,fontSurf);
   SDL_FreeSurface(fontSurf);
@@ -245,11 +266,11 @@ void RenderPlayerHeart(Player *player, SDL_Renderer *render, TTF_Font *font)
   }
 }
 
-
-
+// Niveaux
 void LevelOne(Canars *canars)
 {
   canars->numberInit = 8;
+
   for (int i = 1; i <= canars->numberInit; i++)
   {
     AddCanar(canars, i*60,40);
@@ -260,6 +281,7 @@ void LevelOne(Canars *canars)
 void LevelTwo(Canars *canars)
 {
   canars->numberInit = 10;
+
   for (int i = 1; i <= 3; i++)
   {
     for (int j = 1; j <= canars->numberInit - i; j++)
@@ -269,6 +291,7 @@ void LevelTwo(Canars *canars)
   }
 }
 
+// Charge un niveau
 void LoadLevel(Canars *canars, int lvl)
 {
   switch (lvl)
@@ -280,15 +303,18 @@ void LoadLevel(Canars *canars, int lvl)
       LevelTwo(canars);
       break;
     default:
-        LevelOne(canars);
+      LevelOne(canars);
   }
 }
 
+// Score
 void RenderScore(Player *player, TTF_Font *font, SDL_Renderer *render)
 {
   char scor[MAX_CHAR];
   sprintf(scor, "Score: %d", player->score);
+
   SDL_Color color = {255, 255, 255, 255};
+
   SDL_Surface *fontSurf = TTF_RenderText_Blended(font, scor, color);
   SDL_Texture *fontTexture = SDL_CreateTextureFromSurface(render,fontSurf);
   SDL_FreeSurface(fontSurf);
@@ -299,17 +325,21 @@ void RenderScore(Player *player, TTF_Font *font, SDL_Renderer *render)
   SDL_DestroyTexture(fontTexture);
 }
 
+// Update score
 void UpdateScore(Player *player)
 {
   if (player->score >= player->highScore)
   {
     player->highScore = player->score;
   }
+
   player->score += rand() % 10;
 }
 
+// Sauvegarde score
 void SaveHighScore(int score) {
   FILE *file = fopen("bestScore.txt", "w");
+
   if (file)
   {
     int encrypted = score ^ 0xDEADBEEF;
@@ -318,7 +348,7 @@ void SaveHighScore(int score) {
   }
 }
 
-
+// Collision projectiles
 void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, Walls *walls)
 {
   Flechette *currentFlechette = flechettes->head;
@@ -327,6 +357,7 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
   while (currentFlechette != NULL)
   {
     bool hit = false;
+
     Wall *currentWall = walls->head;
     Wall *prevWall = NULL;
 
@@ -337,7 +368,6 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
         currentWall->health--;
         currentWall->rect.y = (5 - currentWall->health) * 16;
 
-        // destruction mur
         if (currentWall->health <= 0)
         {
           if (prevWall == NULL)
@@ -348,9 +378,9 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
           {
             prevWall->next = currentWall->next;
           }
+
           Wall *tmpWall = currentWall;
           currentWall = currentWall->next;
-
           free(tmpWall);
         }
 
@@ -363,10 +393,11 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
           prevFlechette->next = currentFlechette->next;
         }
         Flechette *tmpBullet = currentFlechette;
-
         currentFlechette = currentFlechette->next;
+
         free(tmpBullet);
         flechettes->ammo--;
+
         hit = true;
         break;
       }
@@ -379,11 +410,11 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
     {
       Canar *currentCanar = canars->head;
       Canar *prevCanar = NULL;
+
       while (currentCanar != NULL)
       {
         if (CheckCollision(&currentFlechette->destRect, &currentCanar->destRect))
         {
-          // supprimer canar
           if (prevCanar == NULL)
           {
             canars->head = currentCanar->next;
@@ -395,11 +426,10 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
           free(currentCanar);
           canars->numberOfCanar--;
 
-          // supprimer bullet
           if (prevFlechette == NULL)
           {
             flechettes->head = currentFlechette->next;
-          }
+          } 
           else
           {
             prevFlechette->next = currentFlechette->next;
@@ -408,7 +438,6 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
           flechettes->ammo--;
 
           UpdateScore(player);
-
           hit = true;
           break;
         }
@@ -416,21 +445,21 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
         prevCanar = currentCanar;
         currentCanar = currentCanar->next;
       }
-    } else if (!hit && currentFlechette->type == ENEMYBULLET)
+    }
+    else if (!hit && currentFlechette->type == ENEMYBULLET)
     {
       if (CheckCollision(&currentFlechette->destRect, &player->destRect))
       {
         PlayerDamage(player);
 
-        // supprimer bullet
         if (prevFlechette == NULL)
         {
-            flechettes->head = currentFlechette->next;
+          flechettes->head = currentFlechette->next;
         }
         else
         {
           prevFlechette->next = currentFlechette->next;
-        } 
+        }
         free(currentFlechette);
         flechettes->ammo--;
 
@@ -450,13 +479,16 @@ void CollideProjectile(Flechettes *flechettes, Canars *canars, Player *player, W
   }
 }
 
+// Collision joueur / canards
 void CollideCanarPlayer(Player *player, Canars *canars)
 {
   Canar *currentCanar = canars->head;
   Canar *prevCanar = NULL;
+
   while(currentCanar != NULL)
   {
-    if(CheckCollision(&player->destRect, &currentCanar->destRect)){
+    if(CheckCollision(&player->destRect, &currentCanar->destRect))
+    {
       if (prevCanar == NULL)
       {
         canars->head = currentCanar->next;
@@ -467,6 +499,7 @@ void CollideCanarPlayer(Player *player, Canars *canars)
       }
       Canar *tmp = currentCanar;
       currentCanar = currentCanar->next;
+
       PlayerDamage(player);
       free(tmp);
       canars->numberOfCanar--;
@@ -479,32 +512,20 @@ void CollideCanarPlayer(Player *player, Canars *canars)
   }
 }
 
+// Libération globale
 void FreeAll(Player *player, Flechettes *flechettes, Canars *canars){
   FreePlayer(&player);
   FreeFlechettes(&flechettes);
   FreeCanar(&canars);
 }
 
+// Input clavier
 void Input(const Uint8 *keystate, Player *player, Flechettes *flechettes)
 { 
-  if(keystate[SDL_SCANCODE_RIGHT])
-  {
-    MoveRight(player);
-  }
-  if (keystate[SDL_SCANCODE_LEFT])
-  {
-    MoveLeft(player);
-  }
-
-  if(keystate[SDL_SCANCODE_DOWN])
-  {
-    MoveDown(player);
-  }
-
-  if (keystate[SDL_SCANCODE_UP])
-  {
-    MoveUp(player);
-  }
+  if(keystate[SDL_SCANCODE_RIGHT]) MoveRight(player);
+  if(keystate[SDL_SCANCODE_LEFT]) MoveLeft(player);
+  if(keystate[SDL_SCANCODE_DOWN]) MoveDown(player);
+  if(keystate[SDL_SCANCODE_UP]) MoveUp(player);
 
   if (keystate[SDL_SCANCODE_SPACE])
   {
@@ -516,39 +537,35 @@ void Input(const Uint8 *keystate, Player *player, Flechettes *flechettes)
   }
   else
   {
-      spacePressed = 0;
+    spacePressed = 0;
   }
 }
 
+// Boucle principale du jeu
 void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *canars, Walls *walls, TTF_Font *font, GameState *gameState)
 {
-  printf("LOG -> |Score: %d | Health: %d | started: %d | numberOfCanar: %d | Space Pressed: %d | Paused: %d |\n",player->score,player->health, gameState->started, canars->numberOfCanar, spacePressed, gameState->paused);
-
   SDL_Event event;
 
   while (SDL_PollEvent(&event))
   {
     if (event.type == SDL_QUIT)
-    {
       gameState->running = false;
-    }
 
     if (event.type == SDL_KEYDOWN)
     {
       if (event.key.keysym.sym == SDLK_ESCAPE)
-      {
         gameState->paused = !gameState->paused;
-      }
 
-      if (event.key.keysym.sym == SDLK_SPACE && gameState->started != true){
+      if (event.key.keysym.sym == SDLK_SPACE && gameState->started != true)
         gameState->started = !gameState->started;
-      } 
     }
   }
 
   const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+
   static Uint32 nextEnemyShot = 0;
   static Uint32 nextMove = 0;
+
   Uint32 baseDelay = 400;
   Uint32 minDelay = 80;
 
@@ -566,21 +583,27 @@ void Game(SDL_Renderer *render, Player *player, Flechettes *flechettes, Canars *
     }
 
     MoveElements(flechettes, canars, &nextMove, moveDelay);
+
     RenderAll(render, player, flechettes, canars, walls, font);
+
     CollideElements(flechettes, canars, player, walls);
+
     Input(keystate, player, flechettes);
+
     if (canars->numberOfCanar <= 0)
     {
       ResetWalls(walls);
       LoadLevel(canars, gameState->currentLevel++);
       CreateWalls(walls);
     }
-  } else if (!gameState->started)
+  }
+  else if (!gameState->started)
   {
     HomeScreen(font, render);
   }
 
-  if (gameState->started && gameState->paused){
+  if (gameState->started && gameState->paused)
+  {
     Pause(render, font, player);
   }
 }

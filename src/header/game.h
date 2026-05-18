@@ -61,6 +61,9 @@ void RenderPlayerHeart(Player *,SDL_Renderer *, TTF_Font *);
 // Pause
 void Pause(SDL_Renderer *, TTF_Font *, Player *);
 
+// Reset de l'etat du jeu
+void ResetAll(Player *, Canars *, GameState *);
+
 // Rendu général
 void RenderAll(SDL_Renderer *, Player *, Flechettes *, Canars *, Walls *, TTF_Font *);
 void RenderScore(Player *, TTF_Font *, SDL_Renderer *);

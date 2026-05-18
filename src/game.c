@@ -291,6 +291,18 @@ void LevelTwo(Canars *canars)
   }
 }
 
+void LevelThree(Canars *canars)
+{
+  canars->numberInit = 
+  for (int i = 0; i<canars->numberInit; i++)
+  {
+    for (int j = 0; j < comp; j++)
+    {
+
+    }
+  }
+}
+
 // Charge un niveau
 void LoadLevel(Canars *canars, int lvl)
 {

@@ -3,4 +3,5 @@
 *.exe
 Game
 obj/*
+VersionOriginal/*
 bestScore.txt

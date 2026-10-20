@@ -291,9 +291,9 @@ void LevelTwo(Canars *canars)
   }
 }
 
-void LevelThree(Canars *canars)
+/*void LevelThree(Canars *canars)
 {
-  canars->numberInit = 
+  canars->numberInit = 0;
   for (int i = 0; i<canars->numberInit; i++)
   {
     for (int j = 0; j < comp; j++)
@@ -301,7 +301,7 @@ void LevelThree(Canars *canars)
 
     }
   }
-}
+}*/
 
 // Charge un niveau
 void LoadLevel(Canars *canars, int lvl)
